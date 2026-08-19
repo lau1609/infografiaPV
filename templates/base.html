@@ -2,71 +2,112 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Cargar fuente de Google Fonts para garantizar compatibilidad en Docker -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Uso de px para evitar colapso de tamaño en :root */
-        :root { font-size: {% if font_scale == '0.78rem' %}12px{% elif font_scale == '0.85rem' %}13.5px{% else %}15px{% endif %}; }
-        
+        :root { font-size: {{ font_scale }}; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            font-family: 'Inter', Arial, sans-serif; 
-            color: #1F2937; /* Color explícito para el texto */
+            font-family: 'Montserrat', sans-serif; 
+            color: #2D3748; 
             background: #ffffff; 
             width: 1300px; 
             height: 800px; 
-            padding: 25px; 
+            padding: 20px 30px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             overflow: hidden; 
         }
         
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #6B21A8; padding-bottom: 10px; }
-        .header h1 { color: #111827; font-size: 1.8rem; text-transform: uppercase; font-weight: 700; }
-        .header h3 { color: #4B5563; font-size: 1rem; font-weight: 400; margin-top: 4px; }
+        /* Encabezado Principal */
+        .header { 
+            text-align: center; 
+            border-top: 3px solid #1E3A8A; 
+            border-bottom: 3px solid #1E3A8A; 
+            padding: 8px 0; 
+            margin-bottom: 15px;
+        }
+        .header h1 { color: #1E293B; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header h3 { color: #64748B; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; margin-top: 2px; }
         
-        .grid-container { display: flex; gap: 20px; height: 680px; }
-        .columna { flex: 1; display: flex; flex-direction: column; gap: 15px; background: #F9FAFB; padding: 12px; border-radius: 8px; }
+        /* Grid de 4 Columnas */
+        .grid-container { display: flex; gap: 25px; flex: 1; }
+        .columna { flex: 1; display: flex; flex-direction: column; gap: 14px; }
         
-        .card-pregunta { background: #ffffff; padding: 10px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .card-pregunta h4 { color: #4C1D95; font-size: 0.95rem; margin-bottom: 8px; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; font-weight: 600; }
+        /* Bloque de Pregunta sin marco estrambótico */
+        .card-pregunta { 
+            background: transparent; 
+            border-bottom: 1px solid #E2E8F0; 
+            padding-bottom: 8px; 
+        }
+        .card-pregunta h4 { 
+            color: #1E1B4B; 
+            font-size: 0.82rem; 
+            margin-bottom: 6px; 
+            font-weight: 700; 
+            line-height: 1.1;
+        }
         
-        .item-respuesta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
-        .resp-info { display: flex; align-items: center; gap: 6px; color: #374151; }
-        .resp-icono { width: 16px; height: 16px; }
-        .porcentaje { font-weight: 700; color: #2563EB; }
+        /* Filas de Respuestas */
+        .item-respuesta { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 4px; 
+            font-size: 0.78rem; 
+        }
+        .resp-info { display: flex; align-items: center; gap: 6px; color: #475569; font-weight: 500; max-width: 80%; }
+        .resp-texto { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .porcentaje { font-weight: 700; color: #4C1D95; }
+
+        /* Pie de página oficial */
+        .footer-banner {
+            background: #2563EB;
+            color: #ffffff;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 6px;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Perfil del Visitante — {{ municipio }}</h1>
-        <h3>Periodo del {{ fecha_inicio }} al {{ fecha_fin }}</h3>
-    </div>
+    <div>
+        <div class="header">
+            <h1>PERFIL DEL VISITANTE — {{ municipio }}</h1>
+            <h3>PERIODO DEL {{ fecha_inicio }} AL {{ fecha_fin }}</h3>
+        </div>
 
-    <div class="grid-container">
-        {% for col_num, preguntas in columnas.items() %}
-        <div class="columna">
-            {% for preg in preguntas %}
-            <div class="card-pregunta">
-                <h4>{{ preg.titulo }}</h4>
-                {% for resp in preg.respuestas %}
-                <div class="item-respuesta">
-                    <div class="resp-info">
-                        {% if resp.icono %}
-                        <img src="{{ resp.icono }}" class="resp-icono" />
-                        {% endif %}
-                        <span>{{ resp.texto }}</span>
+        <div class="grid-container">
+            {% for col_num in [1, 2, 3, 4] %}
+            <div class="columna">
+                {% for preg in columnas[col_num] %}
+                <div class="card-pregunta">
+                    <h4>{{ preg.titulo }}</h4>
+                    {% for resp in preg.respuestas %}
+                    <div class="item-respuesta">
+                        <div class="resp-info">
+                            <span class="resp-texto">{{ resp.texto }}</span>
+                        </div>
+                        <span class="porcentaje">{{ resp.porcentaje }}%</span>
                     </div>
-                    <span class="porcentaje">{{ resp.porcentaje }}%</span>
+                    {% endfor %}
                 </div>
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+
+    <div class="footer-banner">
+        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio }}
     </div>
 
 </body>
