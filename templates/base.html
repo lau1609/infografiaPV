@@ -15,25 +15,25 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background: #ffffff;
-            width: 1400px;
-            padding: 20px 30px;
+            width: 1350px;
+            padding: 15px 25px;
             color: #334155;
         }
 
-        /* HEADER */
+        /* ENCABEZADO */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 4px solid #1e3a8a;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            border-bottom: 4px solid #10529d;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .header-logo-left, .header-logo-right {
             font-weight: 900;
-            font-size: 14px;
-            color: #1e3a8a;
+            font-size: 13px;
+            color: #10529d;
             text-transform: uppercase;
             width: 220px;
         }
@@ -47,46 +47,46 @@
         }
 
         .header-title h1 {
-            font-size: 20px;
-            font-weight: 800;
-            color: #334155;
+            font-size: 19px;
+            font-weight: 900;
+            color: #1e293b;
             letter-spacing: 0.5px;
         }
 
         .header-title h2 {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #64748b;
             margin-top: 2px;
         }
 
-        /* GRID DE 4 COLUMNAS (Estilo Imagen 1) */
+        /* GRID DE 4 COLUMNAS COMPACTO */
         .main-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
+            gap: 20px;
             align-items: start;
         }
 
         .column {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 12px;
         }
 
         /* CARDS / PREGUNTAS */
         .card {
             background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 12px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 8px;
         }
 
         .card-title {
-            font-size: 13.5px;
+            font-size: 12.5px;
             font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 10px;
-            line-height: 1.25;
+            color: #0f172a;
+            margin-bottom: 6px;
+            line-height: 1.2;
         }
 
         /* FILAS DE RESPUESTA */
@@ -94,85 +94,140 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: {{ font_scale }};
+            margin-bottom: 4px;
+            font-size: 11.5px;
         }
 
         .resp-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             max-width: 75%;
         }
 
         .resp-icon {
-            width: 18px;
+            width: 14px;
             text-align: center;
-            color: #6366f1;
-            font-size: 13px;
+            font-size: 11px;
+            opacity: 0.7;
         }
 
         .resp-text {
             color: #475569;
             font-weight: 600;
-            line-height: 1.15;
+            line-height: 1.1;
         }
 
         .resp-val {
             font-weight: 800;
-            font-size: 13.5px;
+            font-size: 12.5px;
             text-align: right;
             white-space: nowrap;
         }
-
-        /* COLORES DE PORCENTAJES SEGUN POSICION O COLUMNA */
-        .col-1 .resp-val { color: #2563eb; }
-        .col-2 .resp-val { color: #3b82f6; }
-        .col-3 .resp-val { color: #d946ef; }
-        .col-4 .resp-val { color: #2563eb; }
 
         .resp-row.highlight .resp-text {
             font-weight: 800;
             color: #0f172a;
         }
+
         .resp-row.highlight .resp-val {
-            font-size: 14.5px;
+            font-size: 13.5px;
         }
 
-        /* ESTILO ESPECIAL BLOQUE NACIONALIDAD */
-        .nation-block {
-            background: #f8fafc;
-            border-radius: 6px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #e2e8f0;
+        /* ESTILO ESPECIAL DISEÑO NACIONALIDAD */
+        .nation-card {
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 10px;
         }
 
-        .nation-subhead {
+        .nation-flex {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            margin-top: 6px;
+        }
+
+        .nation-col-left {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-right: 1px solid #f1f5f9;
+            padding-right: 8px;
+        }
+
+        .nat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nat-icon {
+            font-size: 22px;
+            color: #10529d;
+            width: 26px;
+            text-align: center;
+        }
+
+        .nat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .nat-val {
+            font-size: 14px;
+            font-weight: 900;
+            color: #10529d;
+        }
+
+        .nation-col-right {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nat-subgroup {
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 4px;
+        }
+
+        .nat-subgroup:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .nat-subrow {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            font-weight: 800;
-            color: #1e3a8a;
-            margin-bottom: 6px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #cbd5e1;
+            font-size: 11px;
+            margin-bottom: 3px;
         }
 
-        .nation-list {
-            margin-left: 10px;
-            font-size: 11.5px;
+        .nat-subrow .resp-text {
+            font-weight: 600;
+        }
+
+        .nat-subrow .resp-val {
+            font-size: 12px;
+            color: #10529d;
         }
 
         /* FOOTER */
         .footer {
-            background: #1e3a8a;
+            background: #10529d;
             color: #ffffff;
             text-align: center;
-            padding: 10px;
-            font-size: 11px;
+            padding: 8px;
+            font-size: 10.5px;
             font-weight: 700;
-            margin-top: 25px;
+            margin-top: 15px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
@@ -184,11 +239,11 @@
     <div class="header">
         <div class="header-logo-left">
             GOBIERNO DEL ESTADO<br>
-            <span style="color:#d946ef;">SECRETARÍA DE TURISMO</span>
+            <span style="color:#d0196b;">SECRETARÍA DE TURISMO</span>
         </div>
         <div class="header-title">
             <h1>PERFIL DEL VISITANTE DE {{ municipio.upper() }}</h1>
-            <h2>ACUMULADO {{ fecha_inicio }} - {{ fecha_fin }}</h2>
+            <h2>ACUMULADO 2026 ({{ fecha_inicio }} - {{ fecha_fin }})</h2>
         </div>
         <div class="header-logo-right">
             SICHITUR<br>
@@ -200,25 +255,74 @@
     <div class="main-grid">
         {% for col_num in [1, 2, 3, 4] %}
             <div class="column col-{{ col_num }}">
+                
+                <!-- INYECCIÓN SECCIÓN NACIONALIDAD EN COLUMNA 1 -->
+                {% if col_num == 1 and nacionalidad %}
+                    <div class="card nation-card">
+                        <div class="card-title">Nacionalidad</div>
+                        <div class="nation-flex">
+                            
+                            <!-- Columna Izquierda: Totales General (Nacional vs Internacional) -->
+                            <div class="nation-col-left">
+                                {% for r in nacionalidad.general.respuestas %}
+                                    <div class="nat-item">
+                                        {% if loop.first %}
+                                            <i class="fa-solid fa-map-location-dot nat-icon"></i>
+                                        {% else %}
+                                            <i class="fa-solid fa-earth-americas nat-icon"></i>
+                                        {% endif %}
+                                        <div class="nat-info">
+                                            <span class="nat-label">{{ r.respuesta }}</span>
+                                            <span class="nat-val">{{ r.porcentaje }}%</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Columna Derecha: Desglose Estados y Países -->
+                            <div class="nation-col-right">
+                                <!-- Desglose México -->
+                                <div class="nat-subgroup">
+                                    {% for r in nacionalidad.mexico.respuestas %}
+                                        <div class="nat-subrow">
+                                            <span class="resp-text">{{ r.respuesta }}</span>
+                                            <span class="resp-val">{{ r.porcentaje }}%</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <!-- Desglose Internacional -->
+                                <div class="nat-subgroup">
+                                    {% for r in nacionalidad.internacional.respuestas %}
+                                        <div class="nat-subrow">
+                                            <span class="resp-text">{{ r.respuesta }}</span>
+                                            <span class="resp-val">{{ r.porcentaje }}%</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- RESTO DE PREGUNTAS GENERALES DE LA COLUMNA -->
                 {% for preg in columnas[col_num] %}
                     <div class="card">
-                        <div class="card-title">{{ preg.titulo }}</div>
+                        <div class="card-title">{{ preg.preg_name }}</div>
 
                         {% for r in preg.respuestas %}
                             <div class="resp-row {% if loop.first %}highlight{% endif %}">
                                 <div class="resp-left">
-                                    {% if r.icono %}
-                                        <i class="{{ r.icono }} resp-icon"></i>
-                                    {% else %}
-                                        <i class="fa-solid fa-angle-right resp-icon" style="opacity:0.3;"></i>
-                                    {% endif %}
-                                    <span class="resp-text">{{ r.texto }}</span>
+                                    <i class="fa-solid fa-angle-right resp-icon" style="color: {{ preg.color_hex }};"></i>
+                                    <span class="resp-text">{{ r.respuesta }}</span>
                                 </div>
-                                <span class="resp-val">{{ r.porcentaje }}%</span>
+                                <!-- Color dinámico alternado asignado desde Python -->
+                                <span class="resp-val" style="color: {{ preg.color_hex }};">{{ r.porcentaje }}%</span>
                             </div>
                         {% endfor %}
                     </div>
                 {% endfor %}
+
             </div>
         {% endfor %}
     </div>
