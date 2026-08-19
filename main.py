@@ -91,7 +91,7 @@ async def procesar_infografia(payload: PayloadInfografia):
             elif part == 7:
                 resultado['nacionalidad']['internacional'] = preg
 
-        template = env.get_template("infografia.html")
+        template = env.get_template("base.html")
         html_content = template.render(**resultado)
 
         # 2. Capturar la imagen en memoria
