@@ -110,7 +110,12 @@ async def generar_infografia(data: PayloadInfografia):
         async with async_playwright() as p:
             browser = await p.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox"])
             page = await browser.new_page(viewport={"width": 1300, "height": 800})
-            await page.set_content(html_rendered)
+            
+            # Cargar contenido y esperar recursos de red (fuentes)
+            await page.set_content(html_rendered, wait_until="networkidle")
+            
+            # Esperar explícitamente a que el motor de fuentes termine
+            await page.evaluate("document.fonts.ready")
             
             img_bytes = await page.screenshot(type="png", full_page=False)
             await browser.close()
