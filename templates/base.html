@@ -2,241 +2,209 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     <style>
-        :root { font-size: {{ font_scale }}; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            color: #2D3748; 
-            background: #ffffff; 
-            width: 1300px; 
-            height: 800px; 
-            padding: 20px 25px; 
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #ffffff;
+            width: 1300px;
+            padding: 25px;
+        }
+
+        .contMain {
+            width: 100%;
+            background: #ffffff;
+        }
+
+        /* ENCABEZADO */
+        .headerInfog {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            overflow: hidden; 
+            align-items: center;
+            border-bottom: 5px solid #2d4fa6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        /* 1. Rotación automática de 3 colores en los porcentajes */
-        .item-respuesta:nth-child(3n+1) .porcentaje,
-        .sub-item:nth-child(3n+1) .porcentaje { 
-            color: #8968c2; 
-        }
-
-        .item-respuesta:nth-child(3n+2) .porcentaje,
-        .sub-item:nth-child(3n+2) .porcentaje { 
-            color: #10529d; 
-        }
-
-        .item-respuesta:nth-child(3n+0) .porcentaje,
-        .sub-item:nth-child(3n+0) .porcentaje { 
-            color: #d0196b; 
-        }
-        
-        /* Encabezado */
-        .header { 
-            text-align: center; 
-            border-top: 3px solid #1E3A8A; 
-            border-bottom: 3px solid #1E3A8A; 
-            padding: 6px 0; 
-            margin-bottom: 12px;
-        }
-        .header h1 { color: #1E293B; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .header h3 { color: #64748B; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-top: 2px; }
-        
-        /* Grid Principal de Columnas */
-        .grid-container { display: flex; gap: 20px; flex: 1; }
-        .columna { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-        
-        /* Card Estándar */
-        .card-pregunta:nth-child(3n+1) .porcentaje { 
-            color: #8968c2; /* Morado */
-        }
-        
-        .card-pregunta:nth-child(3n+2) .porcentaje { 
-            color: #10529d; /* Azul */
-        }
-        
-        .card-pregunta:nth-child(3n+0) .porcentaje { 
-            color: #d0196b; /* Rosa */
-        }
-        .card-pregunta { 
-            background: transparent; 
-            border-bottom: 1px solid #E2E8F0; 
-            padding-bottom: 6px; 
-        }
-        .card-pregunta h4 { 
-            color: #1E1B4B; 
-            font-size: 0.82rem; 
-            margin-bottom: 6px; 
-            font-weight: 700; 
-            line-height: 1.15;
-        }
-        
-        /* Estilos de Respuesta Convencional */
-        .item-respuesta { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-bottom: 3px; 
-            font-size: 0.76rem; 
-        }
-        .resp-info { display: flex; align-items: center; gap: 5px; color: #475569; font-weight: 500; max-width: 82%; }
-        .resp-icono { width: 14px; height: 14px; object-fit: contain; }
-        .resp-texto { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .porcentaje { font-weight: 700; min-width: 38px; text-align: right; }
-
-        /* 2. Estilos Tabla Especial para Nacionalidad (Dos Columnas) */
-        .nacionalidad-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        .macro-bloque {
-            display: grid;
-            grid-template-columns: 105px 1fr;
-            align-items: start;
-            gap: 6px;
-        }
-        .macro-titulo {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #111827;
-            padding-top: 1px;
-        }
-        .macro-titulo span {
-            font-weight: 700;
+        .tituloInfog h3 {
             color: #10529d;
-            margin-left: 3px;
-        }
-        .sub-lista {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .sub-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.74rem;
-            color: #374151;
-            border-bottom: 1px solid #D1D5DB;
-            padding-bottom: 2px;
-        }
-        .sub-item .nombre {
-            font-weight: 500;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-align: center;
         }
 
-        /* Pie de página */
-        .footer-banner {
-            background: #1E3A8A;
-            color: #ffffff;
-            text-align: center;
-            font-size: 0.68rem;
+        /* MASONRY / COLUMNAS */
+        .screenInfog {
+            column-count: 3;
+            column-gap: 20px;
+            width: 100%;
+        }
+
+        /* CARD DE PREGUNTA */
+        .item {
+            break-inside: avoid-column;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .item h3 {
+            color: #1a202c;
+            font-size: 15px;
             font-weight: 700;
-            padding: 5px;
-            letter-spacing: 0.5px;
-            margin-top: 6px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 4px;
+        }
+
+        /* FILAS DE PORCENTAJES */
+        .respPorcentaje {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .respPorcentaje p {
+            font-size: 13px;
+            color: #475569;
+            margin: 0;
+        }
+
+        .respPorcentaje h4 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* PRIMERA RESPUESTA BOLD */
+        .bold-first p, .bold-first h4 {
+            font-weight: 900 !important;
+            color: #0f172a !important;
+        }
+
+        /* COLORES DE PORCENTAJE POR PREGUNTA */
+        .morado { color: #8968c2 !important; }
+        .azul   { color: #10529d !important; }
+        .rosa   { color: #d0196b !important; }
+
+        /* BLOQUE ESPECIAL NACIONALIDAD (5, 6, 7) */
+        .itemNation {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+        }
+
+        .itemEsp {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .itemEsp2 {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mex .respPorcentaje, .int .respPorcentaje {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 3px;
+        }
+
+        /* PIE DE PÁGINA */
+        .footInfo {
+            background: #10529d;
+            color: #ffffff;
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-
-    <div>
-        <!-- Encabezado -->
-        <div class="header">
-            <h1>PERFIL DEL VISITANTE — {{ municipio }}</h1>
-            <h3>PERIODO DEL {{ fecha_inicio }} AL {{ fecha_fin }}</h3>
+    <div class="contMain">
+        <div class="headerInfog">
+            <img src="perfil_visitante/_images/logo.png" style="width: 180px;" alt="Logo">
+            <div class="tituloInfog">
+                <h3>PERFIL DEL VISITANTE DE <span style="font-weight: 900;">{{ municipio.upper() }}</span></h3>
+            </div>
+            <img src="perfil_visitante/_images/sichitur.png" style="width: 130px;" alt="Sichitur">
         </div>
 
-        <!-- Renderizado de Columnas -->
-        <div class="grid-container">
-            {% for col_num in [1, 2, 3, 4] %}
-            <div class="columna">
-                {% for preg in columnas[col_num] %}
-                
-                {% if "nacionalidad" in preg.titulo|lower or "procedencia" in preg.titulo|lower %}
-                <!-- Layout especial de 2 columnas para Nacionalidad -->
-                <div class="card-pregunta">
-                    <h4>{{ preg.titulo }}</h4>
-                    <div class="nacionalidad-container">
-                        
-                        {% if tiene_mexico %}
-                        <div class="macro-bloque">
-                            <div class="macro-titulo">
-                                México <span class="porcentaje">98%</span>
+        <div class="screenInfog">
+            {% for preg in bloques %}
+                {% if preg.tipo == 'nacionalidad' %}
+                    <div class="itemNation item">
+                        {% if preg.p5 %}
+                        <div class="itemEsp nation">
+                            <h3>{{ preg.p5.pregunta }}</h3>
+                            {% for r in preg.p5.respuestas %}
+                            <div class="respPorcentaje bold-first">
+                                <p>{{ r.texto }}</p>
+                                <h4 class="azul">{{ r.porcentaje }}%</h4>
                             </div>
-                            <div class="sub-lista">
-                                {% for resp in preg.respuestas %}
-                                    {% if "méxico" not in resp.texto|lower and "mexico" not in resp.texto|lower and "internacional" not in resp.texto|lower %}
-                                    <div class="sub-item">
-                                        <span class="nombre">{{ resp.texto }}</span>
-                                        <span class="porcentaje">{{ resp.porcentaje }}%</span>
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
+                            {% endfor %}
                         </div>
                         {% endif %}
-        
-                        {% if tiene_internacional %}
-                        <div class="macro-bloque">
-                            <div class="macro-titulo">
-                                Internacional <span class="porcentaje">2%</span>
-                            </div>
-                            <div class="sub-lista">
-                                {% for resp in preg.respuestas %}
-                                    {% if "internacional" in resp.texto|lower or ("méxico" not in resp.texto|lower and "mexico" not in resp.texto|lower and not tiene_mexico) %}
-                                    <div class="sub-item">
-                                        <span class="nombre">{{ resp.texto }}</span>
-                                        <span class="porcentaje">{{ resp.porcentaje }}%</span>
-                                    </div>
-                                    {% endif %}
+
+                        <div class="itemEsp2">
+                            {% if preg.p6 %}
+                            <div class="itemEsp mex">
+                                <h3>{{ preg.p6.pregunta }}</h3>
+                                {% for r in preg.p6.respuestas %}
+                                <div class="respPorcentaje {% if loop.first %}bold-first{% endif %}">
+                                    <p>{{ r.texto }}</p>
+                                    <h4 class="morado">{{ r.porcentaje }}%</h4>
+                                </div>
                                 {% endfor %}
                             </div>
-                        </div>
-                        {% endif %}
-        
-                    </div>
-                </div>
-                
-                {% else %}
-                <!-- Layout Estándar para el resto de preguntas -->
-                <div class="card-pregunta">
-                    <h4>{{ preg.titulo }}</h4>
-                    {% for resp in preg.respuestas %}
-                    <div class="item-respuesta">
-                        <div class="resp-info">
-                            {% if resp.icono %}
-                            <img src="{{ resp.icono }}" class="resp-icono" alt="icono" />
                             {% endif %}
-                            <span class="resp-texto">{{ resp.texto }}</span>
+
+                            {% if preg.p7 %}
+                            <div class="itemEsp int">
+                                <h3>{{ preg.p7.pregunta }}</h3>
+                                {% for r in preg.p7.respuestas %}
+                                <div class="respPorcentaje {% if loop.first %}bold-first{% endif %}">
+                                    <p>{{ r.texto }}</p>
+                                    <h4 class="rosa">{{ r.porcentaje }}%</h4>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
-                        <span class="porcentaje">{{ resp.porcentaje }}%</span>
                     </div>
-                    {% endfor %}
-                </div>
+                {% else %}
+                    <div class="item">
+                        <h3>{{ preg.pregunta }}</h3>
+                        {% for r in preg.respuestas %}
+                        <div class="respPorcentaje {% if loop.first %}bold-first{% endif %}">
+                            <p>{{ r.texto }}</p>
+                            <h4 class="{{ preg.color }}">{{ r.porcentaje }}%</h4>
+                        </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
-        
-                {% endfor %}
-            </div>
             {% endfor %}
         </div>
-    </div>
 
-    <!-- Banner Inferior -->
-    <div class="footer-banner">
-        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio|upper }}
+        <div class="footInfo">
+            <h3>FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio.upper() }}</h3>
+        </div>
     </div>
-
 </body>
 </html>
