@@ -109,18 +109,18 @@ async def generar_infografia(data: PayloadInfografia):
         # 6. Capturar Screenshot con Playwright
         async with async_playwright() as p:
             browser = await p.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox"])
-            page = await browser.new_page(viewport={"width": 1300, "height": 800})
             
-            # Cargar contenido y esperar recursos de red (fuentes)
+            # device_scale_factor=2 aumenta drásticamente la nitidez
+            page = await browser.new_page(
+                viewport={"width": 1300, "height": 800}, 
+                device_scale_factor=2
+            )
+            
             await page.set_content(html_rendered, wait_until="networkidle")
-            
-            # Esperar explícitamente a que el motor de fuentes termine
             await page.evaluate("document.fonts.ready")
             
             img_bytes = await page.screenshot(type="png", full_page=False)
             await browser.close()
-
-        return Response(content=img_bytes, media_type="image/png")
 
     except Exception as e:
         logging.error(f"Error procesando la infografía: {str(e)}", exc_info=True)
