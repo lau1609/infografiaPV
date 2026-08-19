@@ -91,7 +91,19 @@ async def procesar_infografia(payload: PayloadInfografia):
             elif part == 7:
                 resultado['nacionalidad']['internacional'] = preg
 
-        return resultado
+        template = env.get_template("infografia.html")
+        html_content = template.render(**resultado)
+
+        # 2. Capturar la imagen en memoria
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page(viewport={"width": 1400, "height": 900})
+            await page.set_content(html_content, wait_until="networkidle")
+            image_bytes = await page.screenshot(full_page=True, type="png")
+            await browser.close()
+
+        # 3. Retornar los bytes limpios de la imagen
+        return Response(content=image_bytes, media_type="image/png")
 
     except Exception as e:
         logging.error(f"Error procesando infografía: {str(e)}", exc_info=True)
