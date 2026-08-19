@@ -31,51 +31,49 @@ class PayloadInfografia(BaseModel):
     preguntas: List[Pregunta]
 
 @app.post("/generar-infografia")
-async def generar_infografia(data: PayloadInfografia):
-    try:
-        # 1. Filtrar preguntas que tienen respuestas
-        preguntas_validas = [p for p in data.preguntas if len(p.respuestas) > 0]
+async def procesar_infografia(data_preguntas):
+    COLORES = ['#8968c2', '#10529d', '#d0196b'] # Morado, Azul, Rosa
+    color_index = 0
 
-        # 2. Control de escala de fuente dinámico
-        total_respuestas = sum(len(p.respuestas) for p in preguntas_validas)
-        font_scale = "11px" if total_respuestas > 35 else ("12px" if total_respuestas > 22 else "13px")
+    resultado = {
+        "titulo": "PERFIL DEL VISITANTE",
+        "periodo": "ACUMULADO 2026",
+        "columnas": {1: [], 2: [], 3: [], 4: []},
+        "nacionalidad": {"general": None, "mexico": None, "internacional": None}
+    }
 
-        # 3. Distribución por 4 columnas obligatorias
-        cols = {1: [], 2: [], 3: [], 4: []}
-        for preg in preguntas_validas:
-            col_target = min(max(preg.columna, 1), 4)
-            cols[col_target].append(preg)
+    for preg in data_preguntas:
+        # 1. Filtro de respuestas (mínimo 2 respuestas o hasta sumar >= 75%)
+        respuestas_ordenadas = sorted(preg['respuestas'], key=lambda x: x['porcentaje'], reverse=True)
+        respuestas_filtradas = []
+        porcentaje_acumulado = 0
 
-        # 4. Renderizar plantilla Jinja2
-        template = env.get_template("base.html")
-        html_rendered = template.render(
-            municipio=data.municipio.strip(),
-            fecha_inicio=data.fecha_inicio,
-            fecha_fin=data.fecha_fin,
-            columnas=cols,
-            font_scale=font_scale
-        )
+        for idx, resp in enumerate(respuestas_ordenadas, start=1):
+            if porcentaje_acumulado < 75 or idx <= 2:
+                porcentaje_acumulado += resp['porcentaje']
+                respuestas_filtradas.append(resp)
+            else:
+                break
+        
+        preg['respuestas'] = respuestas_filtradas
 
-        # 5. Captura con Playwright
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
-            )
-            
-            page = await browser.new_page(
-                viewport={"width": 1400, "height": 900},
-                device_scale_factor=2  # Alta resolución HD
-            )
-            
-            # Cargar HTML y esperar carga de fuentes externas (Montserrat y FontAwesome)
-            await page.set_content(html_rendered, wait_until="networkidle")
-            await page.evaluate("document.fonts.ready")
-            
-            # Capturar todo el contenido
-            img_bytes = await page.screenshot(type="png", full_page=True)
-            await browser.close()
+        # 2. Asignación de color alternado
+        preg['color_hex'] = COLORES[color_index % len(COLORES)]
+        
+        part = preg.get('preg_part_infog')
+        
+        # 3. Separación por sección / columnas
+        if part in [1, 2, 3, 4]:
+            resultado['columnas'][part].append(preg)
+            color_index += 1  # Cambia color solo en preguntas generales
+        elif part == 5:
+            resultado['nacionalidad']['general'] = preg
+        elif part == 6:
+            resultado['nacionalidad']['mexico'] = preg
+        elif part == 7:
+            resultado['nacionalidad']['internacional'] = preg
 
-            return Response(content=img_bytes, media_type="image/png")
+    return resultado
 
     except Exception as e:
         logging.error(f"Error procesando infografía: {str(e)}", exc_info=True)
