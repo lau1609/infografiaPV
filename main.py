@@ -110,7 +110,6 @@ async def generar_infografia(data: PayloadInfografia):
         async with async_playwright() as p:
             browser = await p.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox"])
             
-            # device_scale_factor=2 aumenta drásticamente la nitidez
             page = await browser.new_page(
                 viewport={"width": 1300, "height": 800}, 
                 device_scale_factor=2
@@ -121,6 +120,13 @@ async def generar_infografia(data: PayloadInfografia):
             
             img_bytes = await page.screenshot(type="png", full_page=False)
             await browser.close()
+
+            # 🔴 ESTA LÍNEA FALTABA: Retornar los bytes con el tipo de contenido image/png
+            return Response(content=img_bytes, media_type="image/png")
+
+    except Exception as e:
+        logging.error(f"Error procesando la infografía: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error en servidor Python: {str(e)}")
 
     except Exception as e:
         logging.error(f"Error procesando la infografía: {str(e)}", exc_info=True)
