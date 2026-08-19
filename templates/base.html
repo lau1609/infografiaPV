@@ -55,6 +55,17 @@
         .columna { flex: 1; display: flex; flex-direction: column; gap: 10px; }
         
         /* Card Estándar */
+        .card-pregunta:nth-child(3n+1) .porcentaje { 
+            color: #8968c2; /* Morado */
+        }
+        
+        .card-pregunta:nth-child(3n+2) .porcentaje { 
+            color: #10529d; /* Azul */
+        }
+        
+        .card-pregunta:nth-child(3n+0) .porcentaje { 
+            color: #d0196b; /* Rosa */
+        }
         .card-pregunta { 
             background: transparent; 
             border-bottom: 1px solid #E2E8F0; 
@@ -162,7 +173,7 @@
                         {% if tiene_mexico %}
                         <div class="macro-bloque">
                             <div class="macro-titulo">
-                                México <span>98%</span>
+                                México <span class="porcentaje">98%</span>
                             </div>
                             <div class="sub-lista">
                                 {% for resp in preg.respuestas %}
@@ -176,11 +187,11 @@
                             </div>
                         </div>
                         {% endif %}
-
+        
                         {% if tiene_internacional %}
                         <div class="macro-bloque">
                             <div class="macro-titulo">
-                                Internacional <span>2%</span>
+                                Internacional <span class="porcentaje">2%</span>
                             </div>
                             <div class="sub-lista">
                                 {% for resp in preg.respuestas %}
@@ -194,24 +205,12 @@
                             </div>
                         </div>
                         {% endif %}
-
-                        <!-- Fallback si no aplican las banderas anteriores -->
-                        {% if not tiene_mexico and not tiene_internacional %}
-                        <div class="sub-lista">
-                            {% for resp in preg.respuestas %}
-                            <div class="sub-item">
-                                <span class="nombre">{{ resp.texto }}</span>
-                                <span class="porcentaje">{{ resp.porcentaje }}%</span>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-
+        
                     </div>
                 </div>
                 
                 {% else %}
-                <!-- Layout Estándar de Pregunta -->
+                <!-- Layout Estándar para el resto de preguntas -->
                 <div class="card-pregunta">
                     <h4>{{ preg.titulo }}</h4>
                     {% for resp in preg.respuestas %}
@@ -227,7 +226,7 @@
                     {% endfor %}
                 </div>
                 {% endif %}
-
+        
                 {% endfor %}
             </div>
             {% endfor %}
