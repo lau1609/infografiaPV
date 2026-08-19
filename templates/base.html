@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root { font-size: {{ font_scale }}; }
@@ -16,98 +16,227 @@
             background: #ffffff; 
             width: 1300px; 
             height: 800px; 
-            padding: 20px 30px; 
+            padding: 20px 25px; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden; 
         }
+
+        /* 1. Rotación automática de 3 colores en los porcentajes */
+        .item-respuesta:nth-child(3n+1) .porcentaje,
+        .sub-item:nth-child(3n+1) .porcentaje { 
+            color: #8968c2; 
+        }
+
+        .item-respuesta:nth-child(3n+2) .porcentaje,
+        .sub-item:nth-child(3n+2) .porcentaje { 
+            color: #10529d; 
+        }
+
+        .item-respuesta:nth-child(3n+0) .porcentaje,
+        .sub-item:nth-child(3n+0) .porcentaje { 
+            color: #d0196b; 
+        }
         
-        /* Encabezado Principal */
+        /* Encabezado */
         .header { 
             text-align: center; 
             border-top: 3px solid #1E3A8A; 
             border-bottom: 3px solid #1E3A8A; 
-            padding: 8px 0; 
-            margin-bottom: 15px;
+            padding: 6px 0; 
+            margin-bottom: 12px;
         }
-        .header h1 { color: #1E293B; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .header h3 { color: #64748B; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; margin-top: 2px; }
+        .header h1 { color: #1E293B; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header h3 { color: #64748B; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-top: 2px; }
         
-        /* Grid de 4 Columnas */
-        .grid-container { display: flex; gap: 25px; flex: 1; }
-        .columna { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+        /* Grid Principal de Columnas */
+        .grid-container { display: flex; gap: 20px; flex: 1; }
+        .columna { flex: 1; display: flex; flex-direction: column; gap: 10px; }
         
-        /* Bloque de Pregunta sin marco estrambótico */
+        /* Card Estándar */
         .card-pregunta { 
             background: transparent; 
             border-bottom: 1px solid #E2E8F0; 
-            padding-bottom: 8px; 
+            padding-bottom: 6px; 
         }
         .card-pregunta h4 { 
             color: #1E1B4B; 
             font-size: 0.82rem; 
             margin-bottom: 6px; 
             font-weight: 700; 
-            line-height: 1.1;
+            line-height: 1.15;
         }
         
-        /* Filas de Respuestas */
+        /* Estilos de Respuesta Convencional */
         .item-respuesta { 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            margin-bottom: 4px; 
-            font-size: 0.78rem; 
+            margin-bottom: 3px; 
+            font-size: 0.76rem; 
         }
-        .resp-info { display: flex; align-items: center; gap: 6px; color: #475569; font-weight: 500; max-width: 80%; }
+        .resp-info { display: flex; align-items: center; gap: 5px; color: #475569; font-weight: 500; max-width: 82%; }
+        .resp-icono { width: 14px; height: 14px; object-fit: contain; }
         .resp-texto { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .porcentaje { font-weight: 700; color: #4C1D95; }
+        .porcentaje { font-weight: 700; min-width: 38px; text-align: right; }
 
-        /* Pie de página oficial */
+        /* 2. Estilos Tabla Especial para Nacionalidad (Dos Columnas) */
+        .nacionalidad-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .macro-bloque {
+            display: grid;
+            grid-template-columns: 105px 1fr;
+            align-items: start;
+            gap: 6px;
+        }
+        .macro-titulo {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #111827;
+            padding-top: 1px;
+        }
+        .macro-titulo span {
+            font-weight: 700;
+            color: #10529d;
+            margin-left: 3px;
+        }
+        .sub-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .sub-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.74rem;
+            color: #374151;
+            border-bottom: 1px solid #D1D5DB;
+            padding-bottom: 2px;
+        }
+        .sub-item .nombre {
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Pie de página */
         .footer-banner {
-            background: #2563EB;
+            background: #1E3A8A;
             color: #ffffff;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
-            padding: 6px;
+            padding: 5px;
             letter-spacing: 0.5px;
-            margin-top: 10px;
+            margin-top: 6px;
         }
     </style>
 </head>
 <body>
 
     <div>
+        <!-- Encabezado -->
         <div class="header">
             <h1>PERFIL DEL VISITANTE — {{ municipio }}</h1>
             <h3>PERIODO DEL {{ fecha_inicio }} AL {{ fecha_fin }}</h3>
         </div>
 
+        <!-- Renderizado de Columnas -->
         <div class="grid-container">
             {% for col_num in [1, 2, 3, 4] %}
             <div class="columna">
                 {% for preg in columnas[col_num] %}
+                
+                {% if "nacionalidad" in preg.titulo|lower or "procedencia" in preg.titulo|lower %}
+                <!-- Layout especial de 2 columnas para Nacionalidad -->
+                <div class="card-pregunta">
+                    <h4>{{ preg.titulo }}</h4>
+                    <div class="nacionalidad-container">
+                        
+                        {% if tiene_mexico %}
+                        <div class="macro-bloque">
+                            <div class="macro-titulo">
+                                México <span>98%</span>
+                            </div>
+                            <div class="sub-lista">
+                                {% for resp in preg.respuestas %}
+                                    {% if "méxico" not in resp.texto|lower and "mexico" not in resp.texto|lower and "internacional" not in resp.texto|lower %}
+                                    <div class="sub-item">
+                                        <span class="nombre">{{ resp.texto }}</span>
+                                        <span class="porcentaje">{{ resp.porcentaje }}%</span>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if tiene_internacional %}
+                        <div class="macro-bloque">
+                            <div class="macro-titulo">
+                                Internacional <span>2%</span>
+                            </div>
+                            <div class="sub-lista">
+                                {% for resp in preg.respuestas %}
+                                    {% if "internacional" in resp.texto|lower or ("méxico" not in resp.texto|lower and "mexico" not in resp.texto|lower and not tiene_mexico) %}
+                                    <div class="sub-item">
+                                        <span class="nombre">{{ resp.texto }}</span>
+                                        <span class="porcentaje">{{ resp.porcentaje }}%</span>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Fallback si no aplican las banderas anteriores -->
+                        {% if not tiene_mexico and not tiene_internacional %}
+                        <div class="sub-lista">
+                            {% for resp in preg.respuestas %}
+                            <div class="sub-item">
+                                <span class="nombre">{{ resp.texto }}</span>
+                                <span class="porcentaje">{{ resp.porcentaje }}%</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                
+                {% else %}
+                <!-- Layout Estándar de Pregunta -->
                 <div class="card-pregunta">
                     <h4>{{ preg.titulo }}</h4>
                     {% for resp in preg.respuestas %}
                     <div class="item-respuesta">
                         <div class="resp-info">
+                            {% if resp.icono %}
+                            <img src="{{ resp.icono }}" class="resp-icono" alt="icono" />
+                            {% endif %}
                             <span class="resp-texto">{{ resp.texto }}</span>
                         </div>
                         <span class="porcentaje">{{ resp.porcentaje }}%</span>
                     </div>
                     {% endfor %}
                 </div>
+                {% endif %}
+
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
     </div>
 
+    <!-- Banner Inferior -->
     <div class="footer-banner">
-        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio }}
+        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio|upper }}
     </div>
 
 </body>
