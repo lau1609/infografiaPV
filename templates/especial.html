@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root { font-size: {{ font_scale }}; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #fff; width: 1300px; height: 800px; padding: 25px; overflow: hidden; }
+        
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #6B21A8; padding-bottom: 10px; }
+        .header h1 { color: #333; font-size: 1.8rem; text-transform: uppercase; }
+        .header h3 { color: #666; font-size: 1rem; font-weight: 400; margin-top: 4px; }
+        
+        .grid-container { display: flex; gap: 20px; height: 680px; }
+        .columna { flex: 1; display: flex; flex-direction: column; gap: 15px; background: #F9FAFB; padding: 12px; border-radius: 8px; }
+        
+        .card-pregunta { background: #fff; padding: 10px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card-pregunta h4 { color: #4C1D95; font-size: 0.9rem; margin-bottom: 8px; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; }
+        
+        .item-respuesta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .resp-info { display: flex; align-items: center; gap: 6px; }
+        .resp-icono { width: 16px; height: 16px; }
+        .porcentaje { font-weight: bold; color: #2563EB; }
+
+        /* Acomodo dinámico si falta nacionalidad */
+        .nac-bloque { padding: 8px; border-radius: 4px; text-align: center; }
+        .nac-full { background: #EEF2FF; margin-top: {% if not tiene_mexico or not tiene_internacional %}auto{% else %}0{% endif %}; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Perfil del Visitante — {{ municipio }}</h1>
+        <h3>Periodo del {{ fecha_inicio }} al {{ fecha_fin }}</h3>
+    </div>
+
+    <div class="grid-container">
+        {% for col_num, preguntas in columnas.items() %}
+        <div class="columna">
+            {% for preg in preguntas %}
+            <div class="card-pregunta">
+                <h4>{{ preg.titulo }}</h4>
+                {% for resp in preg.respuestas %}
+                <div class="item-respuesta">
+                    <div class="resp-info">
+                        {% if resp.icono %}
+                        <img src="{{ resp.icono }}" class="resp-icono" />
+                        {% endif %}
+                        <span>{{ resp.texto }}</span>
+                    </div>
+                    <span class="porcentaje">{{ resp.porcentaje }}%</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
