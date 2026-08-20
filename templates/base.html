@@ -48,7 +48,7 @@
 
         .header-title h1 {
             font-size: 19px;
-            font-weight: 900;
+            
             color: #1e293b;
             letter-spacing: 0.5px;
         }
@@ -66,6 +66,9 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             align-items: start;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .column {
@@ -242,7 +245,7 @@
             
         </div>
         <div class="header-title">
-            <h1>PERFIL DEL VISITANTE DE {{ municipio.upper() }}</h1>
+            <h1>PERFIL DEL VISITANTE DE <span style="font-weight: 900;">{{ municipio.upper() }}</span></h1>
             <h2>ACUMULADO {{ fecha_inicio }} - {{ fecha_fin }}</h2>
         </div>
         <div class="header-logo-right">
