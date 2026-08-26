@@ -18,6 +18,12 @@
             width: 1350px;
             padding: 15px 25px;
             color: #334155;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centra verticalmente */
+            align-items: center;     /* Centra horizontalmente */
+            min-height: 100vh;       /* Ocupa toda la altura de la pantalla virtual */
+            box-sizing: border-box;
         }
 
         /* ENCABEZADO */
@@ -65,10 +71,10 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            align-items: center;
+            align-items: start;
             width: 100%;
             max-width: 1200px;
-            max-height: 800px;
+            min-height: 800px;
             margin: 0 auto;
         }
 
