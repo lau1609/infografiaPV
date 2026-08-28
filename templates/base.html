@@ -15,15 +15,14 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background: #ffffff;
-            width: 1900px;
-            padding: 15px 25px;
             color: #515457;
+        }
+        #infografia {
+            width: 1400px; /* Ancho fijo para renderizar todo compacto */
+            background: #ffffff;
+            padding: 20px 30px;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centra verticalmente */
-            align-items: center;     /* Centra horizontalmente */
-            min-height: 100vh;       /* Ocupa toda la altura de la pantalla virtual */
-            box-sizing: border-box;
         }
 
         /* ENCABEZADO */
@@ -74,9 +73,6 @@
             gap: 20px;
             align-items: start;
             width: 100%;
-            max-width: 1200px;
-            min-height: 800px;
-            margin: 0 auto;
         }
 
         .column {
@@ -252,108 +248,108 @@
     </style>
 </head>
 <body>
-
-    <!-- ENCABEZADO -->
-    <div class="header">
-        <div class="header-logo-left">
-            <img width="250px" src="https://sichitur.org/perfil_visitante/_images/logo.png" alt="MDN" />
-            
-        </div>
-        <div class="header-title">
-            <h1>PERFIL DEL VISITANTE DE <span style="font-weight: 900;">{{ municipio.upper() }}</span></h1>
-            <h2>ACUMULADO {{ fecha_inicio }} - {{ fecha_fin }}</h2>
-        </div>
-        <div class="header-logo-right">
-            <img width="185px" src="https://sichitur.org/perfil_visitante/_images/sichitur.png" alt="MDN" />
-        </div>
-    </div>
-
-    <!-- CONTENIDO EN 4 COLUMNAS -->
-    <div class="main-grid">
-        {% for col_num in [1, 2, 3, 4] %}
-            <div class="column col-{{ col_num }}">
+    <div id="infografia">
+        <!-- ENCABEZADO -->
+        <div class="header">
+            <div class="header-logo-left">
+                <img width="250px" src="https://sichitur.org/perfil_visitante/_images/logo.png" alt="MDN" />
                 
-                <!-- INYECCIÓN SECCIÓN NACIONALIDAD EN COLUMNA 1 -->
-                {% if col_num == 1 and nacionalidad %}
-                    <div class="card nation-card">
-                        <div class="card-title">Nacionalidad</div>
-                        <div class="nation-flex">
-                            
-                            <!-- Columna Izquierda: Totales (Nacional e Internacional) -->
-                            <div class="nation-col-left">
-                                {% for r in nacionalidad.general.respuestas %}
-                                    <div class="nat-item">
-                                        {% if loop.first %}
-                                            <i class="fa-solid fa-map-location-dot nat-icon"></i>
-                                            <span class="nat-label">{{ r.respuesta }}</span>
-                                            <span class="nat-val">{{ r.porcentaje }}%</span>
-                                        {% else %}
-                                            <i class="fa-solid fa-earth-americas nat-icon"></i>
-                                            <span class="nat-label">{{ r.respuesta }}</span>
-                                            <span class="nat-val">{{ r.porcentaje }}%</span>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                
-                            <!-- Columna Derecha: Tabla de desgloses estructurada por filas -->
-                            <div class="nation-col-right">
-                                
-                                <!-- Desglose México -->
-                                <div class="nat-subgroup">
-                                    {% for r in nacionalidad.mexico.respuestas %}
-                                        <div class="nat-subrow {% if loop.first %}highlight-row{% endif %}">
-                                            <span class="resp-text">{{ r.respuesta }}</span>
-                                            <span class="resp-val">{{ r.porcentaje }}%</span>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                
-                                <!-- Separador limpio entre México e Internacional -->
-                                <div style="border-bottom: 2px solid #cbd5e1; margin: 8px 0;"></div>
-                
-                                <!-- Desglose Internacional -->
-                                <div class="nat-subgroup">
-                                    {% for r in nacionalidad.internacional.respuestas %}
-                                        <div class="nat-subrow {% if loop.first %}highlight-row{% endif %}">
-                                            <span class="resp-text">{{ r.respuesta }}</span>
-                                            <span class="resp-val">{{ r.porcentaje }}%</span>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                
-                            </div>
-                
-                        </div>
-                    </div>
-                {% endif %}
-
-                <!-- RESTO DE PREGUNTAS GENERALES DE LA COLUMNA -->
-                {% for preg in columnas[col_num] %}
-                    <div class="card">
-                        <div class="card-title">{{ preg.preg_name }}</div>
-
-                        {% for r in preg.respuestas %}
-                            <div class="resp-row {% if loop.first %}highlight{% endif %}">
-                                <div class="resp-left">
-                                    <i class="fa-solid fa-angle-right resp-icon" style="color: {{ preg.color_hex }};"></i>
-                                    <span class="resp-text">{{ r.respuesta }}</span>
-                                </div>
-                                <!-- Color dinámico alternado asignado desde Python -->
-                                <span class="resp-val" style="color: {{ preg.color_hex }};">{{ r.porcentaje }}%</span>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-
             </div>
-        {% endfor %}
+            <div class="header-title">
+                <h1>PERFIL DEL VISITANTE DE <span style="font-weight: 900;">{{ municipio.upper() }}</span></h1>
+                <h2>ACUMULADO {{ fecha_inicio }} - {{ fecha_fin }}</h2>
+            </div>
+            <div class="header-logo-right">
+                <img width="185px" src="https://sichitur.org/perfil_visitante/_images/sichitur.png" alt="MDN" />
+            </div>
+        </div>
+    
+        <!-- CONTENIDO EN 4 COLUMNAS -->
+        <div class="main-grid">
+            {% for col_num in [1, 2, 3, 4] %}
+                <div class="column col-{{ col_num }}">
+                    
+                    <!-- INYECCIÓN SECCIÓN NACIONALIDAD EN COLUMNA 1 -->
+                    {% if col_num == 1 and nacionalidad %}
+                        <div class="card nation-card">
+                            <div class="card-title">Nacionalidad</div>
+                            <div class="nation-flex">
+                                
+                                <!-- Columna Izquierda: Totales (Nacional e Internacional) -->
+                                <div class="nation-col-left">
+                                    {% for r in nacionalidad.general.respuestas %}
+                                        <div class="nat-item">
+                                            {% if loop.first %}
+                                                <i class="fa-solid fa-map-location-dot nat-icon"></i>
+                                                <span class="nat-label">{{ r.respuesta }}</span>
+                                                <span class="nat-val">{{ r.porcentaje }}%</span>
+                                            {% else %}
+                                                <i class="fa-solid fa-earth-americas nat-icon"></i>
+                                                <span class="nat-label">{{ r.respuesta }}</span>
+                                                <span class="nat-val">{{ r.porcentaje }}%</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                    
+                                <!-- Columna Derecha: Tabla de desgloses estructurada por filas -->
+                                <div class="nation-col-right">
+                                    
+                                    <!-- Desglose México -->
+                                    <div class="nat-subgroup">
+                                        {% for r in nacionalidad.mexico.respuestas %}
+                                            <div class="nat-subrow {% if loop.first %}highlight-row{% endif %}">
+                                                <span class="resp-text">{{ r.respuesta }}</span>
+                                                <span class="resp-val">{{ r.porcentaje }}%</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                    
+                                    <!-- Separador limpio entre México e Internacional -->
+                                    <div style="border-bottom: 2px solid #cbd5e1; margin: 8px 0;"></div>
+                    
+                                    <!-- Desglose Internacional -->
+                                    <div class="nat-subgroup">
+                                        {% for r in nacionalidad.internacional.respuestas %}
+                                            <div class="nat-subrow {% if loop.first %}highlight-row{% endif %}">
+                                                <span class="resp-text">{{ r.respuesta }}</span>
+                                                <span class="resp-val">{{ r.porcentaje }}%</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                    
+                                </div>
+                    
+                            </div>
+                        </div>
+                    {% endif %}
+    
+                    <!-- RESTO DE PREGUNTAS GENERALES DE LA COLUMNA -->
+                    {% for preg in columnas[col_num] %}
+                        <div class="card">
+                            <div class="card-title">{{ preg.preg_name }}</div>
+    
+                            {% for r in preg.respuestas %}
+                                <div class="resp-row {% if loop.first %}highlight{% endif %}">
+                                    <div class="resp-left">
+                                        <i class="fa-solid fa-angle-right resp-icon" style="color: {{ preg.color_hex }};"></i>
+                                        <span class="resp-text">{{ r.respuesta }}</span>
+                                    </div>
+                                    <!-- Color dinámico alternado asignado desde Python -->
+                                    <span class="resp-val" style="color: {{ preg.color_hex }};">{{ r.porcentaje }}%</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+    
+                </div>
+            {% endfor %}
+        </div>
+    
+        <!-- PIE DE PÁGINA -->
+        <div class="footer">
+            FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio.upper() }}
+        </div>
     </div>
-
-    <!-- PIE DE PÁGINA -->
-    <div class="footer">
-        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio.upper() }}
-    </div>
-
 </body>
 </html>
