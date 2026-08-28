@@ -100,7 +100,7 @@ async def procesar_infografia(payload: PayloadInfografia):
             
             # 3x DPI para calidad Retina / 4K
             context = await browser.new_context(
-                viewport={"width": 1600, "height": 1200},
+                viewport={"width": 1600, "height": 1350},
                 device_scale_factor=3
             )
             
