@@ -94,31 +94,30 @@ async def procesar_infografia(payload: PayloadInfografia):
         template = env.get_template("base.html")
         html_content = template.render(**resultado)
 
-        # 2. Capturar la imagen en memoria
-        # 2. Capturar la imagen en memoria con ALTA RESOLUCIÓN (High DPI / Retinal Display)
+        # 2. Capturar la imagen en alta calidad enfocada en el diseño
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             
-            # device_scale_factor=2 o 3 multiplica los píxeles (similar a pantallas Retina/4K)
+            # device_scale_factor en 3 duplica/triplica los DPI (ultra nítido)
             context = await browser.new_context(
-                viewport={"width": 1920, "height": 1080},
-                device_scale_factor=3  # <-- ESTE ES EL CAMBIO CLAVE (Multiplica x3 la densidad)
+                viewport={"width": 1400, "height": 900},
+                device_scale_factor=3
             )
             
             page = await context.new_page()
             await page.set_content(html_content, wait_until="networkidle")
-            
-            # Opcional: Asegurar que las fuentes externas o vectores rendericen al 100%
             await page.evaluate("document.fonts.ready")
         
-            # Si tu HTML tiene un contenedor principal con tamaño fijo (ej. A4 o HD), 
-            # es mejor tomarle screenshot al elemento directo o usar full_page=True:
-            image_bytes = await page.screenshot(
-                full_page=True, 
-                type="png",
-                omit_background=False
-            )
+            # CAPTURA SOLO EL CONTENEDOR (reemplaza '#infografia' por la clase/ID de tu contenedor principal)
+            # Esto elimina las franjas blancas sobrantes y ajusta la imagen al borde exacto
+            element = page.locator("#infografia")  # ej. "#infografia" o ".container"
             
+            if await element.count() > 0:
+                image_bytes = await element.screenshot(type="png")
+            else:
+                # Si no usas ID, usa page.screenshot pero omitiendo el viewport sobrante
+                image_bytes = await page.screenshot(type="png", full_page=False)
+        
             await browser.close()
 
         # 3. Retornar los bytes limpios de la imagen
