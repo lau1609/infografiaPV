@@ -155,24 +155,26 @@
 
         .nation-flex {
             display: flex;
-            gap: 15px;
-            align-items: flex-start;
+            gap: 12px;
+            align-items: stretch;
             margin-top: 6px;
         }
 
         .nation-col-left {
-            width: 45%;
+            width: 38%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            border-right: 1px solid #f1f5f9;
+            justify-content: space-around;
+            border-right: 2px solid #e2e8f0;
             padding-right: 8px;
         }
 
         .nat-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            text-align: center;
+            padding: 10px 0;
         }
 
         .nat-icon {
@@ -200,10 +202,10 @@
         }
 
         .nation-col-right {
-            width: 55%;
+            width: 62%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            justify-content: space-between;
         }
 
         .nat-subgroup {
@@ -219,8 +221,10 @@
         .nat-subrow {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 11px;
-            margin-bottom: 6px;
+            padding: 5px 0;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .nat-subrow .resp-text {
@@ -275,25 +279,24 @@
                         <div class="card-title">Nacionalidad</div>
                         <div class="nation-flex">
                             
-                            <!-- Columna Izquierda: Totales General (Nacional vs Internacional) -->
+                            <!-- Columna Izquierda: Totales (Nacional e Internacional) -->
                             <div class="nation-col-left">
                                 {% for r in nacionalidad.general.respuestas %}
                                     <div class="nat-item">
                                         {% if loop.first %}
                                             <i class="fa-solid fa-map-location-dot nat-icon"></i>
+                                            <span class="nat-label">{{ r.respuesta }}</span>
+                                            <span class="nat-val">{{ r.porcentaje }}%</span>
                                         {% else %}
                                             <i class="fa-solid fa-earth-americas nat-icon"></i>
-                                        {% endif %}
-                                        <div class="nat-info">
                                             <span class="nat-label">{{ r.respuesta }}</span>
-                                            <!-- Se mantiene el color determinado por la variable, o tu estilo principal -->
                                             <span class="nat-val">{{ r.porcentaje }}%</span>
-                                        </div>
+                                        {% endif %}
                                     </div>
                                 {% endfor %}
                             </div>
                 
-                            <!-- Columna Derecha: Desglose Estados y Países separados de forma limpia -->
+                            <!-- Columna Derecha: Tabla de desgloses estructurada por filas -->
                             <div class="nation-col-right">
                                 
                                 <!-- Desglose México -->
@@ -306,8 +309,8 @@
                                     {% endfor %}
                                 </div>
                 
-                                <!-- Línea separadora limpia opcional entre México e Internacional (sin líneas rojas de guía) -->
-                                <div style="border-bottom: 1px dashed #cbd5e1; margin: 6px 0;"></div>
+                                <!-- Separador limpio entre México e Internacional -->
+                                <div style="border-bottom: 2px solid #cbd5e1; margin: 8px 0;"></div>
                 
                                 <!-- Desglose Internacional -->
                                 <div class="nat-subgroup">
