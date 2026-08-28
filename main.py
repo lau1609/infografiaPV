@@ -98,9 +98,9 @@ async def procesar_infografia(payload: PayloadInfografia):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             
-            # device_scale_factor en 3 duplica/triplica los DPI (ultra nítido)
+            # 3x DPI para calidad Retina / 4K
             context = await browser.new_context(
-                viewport={"width": 1900, "height": 1300},
+                viewport={"width": 1500, "height": 1000},
                 device_scale_factor=3
             )
             
@@ -108,20 +108,20 @@ async def procesar_infografia(payload: PayloadInfografia):
             await page.set_content(html_content, wait_until="networkidle")
             await page.evaluate("document.fonts.ready")
         
-            # CAPTURA SOLO EL CONTENEDOR (reemplaza '#infografia' por la clase/ID de tu contenedor principal)
-            # Esto elimina las franjas blancas sobrantes y ajusta la imagen al borde exacto
-            element = page.locator("#infografia")  # ej. "#infografia" o ".container"
+            # Localizamos el contenedor directo
+            element = page.locator("#infografia")
             
             if await element.count() > 0:
+                # Toma el screenshot ajustado ÚNICAMENTE a los límites del div #infografia
                 image_bytes = await element.screenshot(type="png")
             else:
-                # Si no usas ID, usa page.screenshot pero omitiendo el viewport sobrante
-                image_bytes = await page.screenshot(type="png", full_page=False)
+                # Respaldos en caso de fallo
+                image_bytes = await page.screenshot(type="png", full_page=True)
         
             await browser.close()
-
-        # 3. Retornar los bytes limpios de la imagen
+        
         return Response(content=image_bytes, media_type="image/png")
+
 
     except Exception as e:
         logging.error(f"Error procesando infografía: {str(e)}", exc_info=True)
