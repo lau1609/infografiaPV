@@ -100,7 +100,7 @@ async def procesar_infografia(payload: PayloadInfografia):
             
             # device_scale_factor en 3 duplica/triplica los DPI (ultra nítido)
             context = await browser.new_context(
-                viewport={"width": 1400, "height": 900},
+                viewport={"width": 1900, "height": 1300},
                 device_scale_factor=3
             )
             
