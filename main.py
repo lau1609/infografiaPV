@@ -95,11 +95,30 @@ async def procesar_infografia(payload: PayloadInfografia):
         html_content = template.render(**resultado)
 
         # 2. Capturar la imagen en memoria
+        # 2. Capturar la imagen en memoria con ALTA RESOLUCIÓN (High DPI / Retinal Display)
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            page = await browser.new_page(viewport={"width": 1400, "height": 900})
+            
+            # device_scale_factor=2 o 3 multiplica los píxeles (similar a pantallas Retina/4K)
+            context = await browser.new_context(
+                viewport={"width": 1920, "height": 1080},
+                device_scale_factor=3  # <-- ESTE ES EL CAMBIO CLAVE (Multiplica x3 la densidad)
+            )
+            
+            page = await context.new_page()
             await page.set_content(html_content, wait_until="networkidle")
-            image_bytes = await page.screenshot(full_page=True, type="png")
+            
+            # Opcional: Asegurar que las fuentes externas o vectores rendericen al 100%
+            await page.evaluate("document.fonts.ready")
+        
+            # Si tu HTML tiene un contenedor principal con tamaño fijo (ej. A4 o HD), 
+            # es mejor tomarle screenshot al elemento directo o usar full_page=True:
+            image_bytes = await page.screenshot(
+                full_page=True, 
+                type="png",
+                omit_background=False
+            )
+            
             await browser.close()
 
         # 3. Retornar los bytes limpios de la imagen
