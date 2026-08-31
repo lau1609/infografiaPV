@@ -44,7 +44,6 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
     try:
         data = payload.dict()
         
-        # Mapeo directo por posición de preguntas (1 a 20)
         p: dict = {i: None for i in range(1, 21)}
         nacionalidad = {
             "general": None,
@@ -52,45 +51,53 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
             "internacional": None
         }
 
-        color_index = 0
+        color_idx = 0
 
         for preg in data["preguntas"]:
             preg['preg_name'] = preg.get('preg_name') or preg.get('titulo') or ""
             pos = preg.get('preg_part_infog') or preg.get('columna')
             
-            # Formatear nombres de respuestas si viene 'texto'
+            # Asignar color alternado a la tarjeta
+            preg['color_hex'] = COLORES[color_idx % len(COLORES)]
+            color_idx += 1
+
             for resp in preg['respuestas']:
                 if not resp.get('respuesta') and resp.get('texto'):
                     resp['respuesta'] = resp['texto']
 
-            # Asignación de color alternado a la pregunta
-            preg['color_hex'] = COLORES[color_index % len(COLORES)]
-            color_index += 1
-
             if pos and 1 <= pos <= 20:
                 p[pos] = preg
 
-            # Manejo específico para los bloques de Nacionalidad si vienen separados (5, 6, 7)
-            if pos == 4 or pos == 5:
+            # Mapeo específico de Nacionalidad (4, 5, 6)
+            if pos == 4:
                 nacionalidad['general'] = preg
-            elif pos == 6:
+            elif pos == 5:
                 nacionalidad['mexico'] = preg
-            elif pos == 7:
+            elif pos == 6:
                 nacionalidad['internacional'] = preg
 
-        # Generar gráfica de dona transparente en Matplotlib para la Pregunta 15
+        # Identificar la posición index de "Trabajo/negocios" en la pregunta 12 para el conector SVG
+        idx_trabajo_12 = 0
+        if p[12] and p[12]['respuestas']:
+            for index, r in enumerate(p[12]['respuestas']):
+                if "trabajo" in r['respuesta'].lower() or "negocio" in r['respuesta'].lower():
+                    idx_trabajo_12 = index
+                    break
+
+        # Generar Gráfica de Dona en Matplotlib para la pregunta 15
         grafica_dona_base64 = ""
         if p[15] and p[15]['respuestas']:
             fig, ax = plt.subplots(figsize=(2.2, 2.2), subplot_kw=dict(aspect="equal"))
+            
             pcts = [r['porcentaje'] for r in p[15]['respuestas']]
-            colors_dona = ['#10529d', '#d0196b', '#8968c2'][:len(pcts)]
+            colors_dona = ['#d0196b', '#8968c2', '#10529d', '#22c55e', '#f59e0b'][:len(pcts)]
 
             ax.pie(
                 pcts, 
                 colors=colors_dona, 
                 startangle=90, 
                 counterclock=False,
-                wedgeprops=dict(width=0.45, edgecolor='white', linewidth=2)
+                wedgeprops=dict(width=0.42, edgecolor='white', linewidth=2)
             )
             
             buf = io.BytesIO()
@@ -105,6 +112,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
             "fecha_fin": data["fecha_fin"],
             "p": p,
             "nacionalidad": nacionalidad,
+            "idx_trabajo_12": idx_trabajo_12,
             "grafica_dona": grafica_dona_base64
         }
 
