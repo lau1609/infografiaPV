@@ -2,19 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Perfil del Visitante - Especial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Montserrat', sans-serif; background: #ffffff; color: #515457; }
-        
-        #infografia {
-            width: 1400px;
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
             background: #ffffff;
-            padding: 20px 25px;
+            color: #515457;
+        }
+
+        #infografia {
+            width: 1450px;
+            background: #ffffff;
+            padding: 20px 30px;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         /* ENCABEZADO */
@@ -24,103 +33,243 @@
             align-items: center;
             width: 100%;
             border-bottom: 4px solid #10529d;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
-        .header-logo { font-weight: 900; font-size: 13px; color: #10529d; text-transform: uppercase; width: 220px; }
-        .header-logo.right { text-align: right; }
-        .header-title { text-align: center; }
-        .header-title h1 { font-size: 20px; color: #515457; font-weight: 700; letter-spacing: 0.5px; }
-        .header-title h2 { font-size: 14px; font-weight: 600; color: #515457; margin-top: 2px; }
 
-        /* GRID 4 COLUMNAS */
-        .grid-container {
+        .header-logo-left, .header-logo-right {
+            font-weight: 900;
+            font-size: 13px;
+            color: #10529d;
+            text-transform: uppercase;
+            width: 230px;
+        }
+
+        .header-logo-right { text-align: right; }
+        .header-title { text-align: center; }
+
+        .header-title h1 {
+            font-size: 22px;
+            color: #515457;
+            font-weight: 200;
+            letter-spacing: 0.2px;
+        }
+
+        .header-title h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #515457;
+            margin-top: 2px;
+        }
+
+        /* GRID PRINCIPAL DE 4 COLUMNAS */
+        .main-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            width: 100%;
+            gap: 22px;
             align-items: start;
+            width: 100%;
         }
 
-        .col { display: flex; flex-direction: column; gap: 12px; position: relative; }
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-        /* ESTILO CARDS */
+        /* ESTILOS DE TARJETA ESTÁNDAR */
         .card {
-            background: #fff;
-            border: 2px solid #a3b899;
-            border-radius: 4px;
-            padding: 10px 12px;
-            position: relative;
-        }
-
-        .card-num {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            background: #3e8346;
-            color: white;
-            font-weight: 800;
-            font-size: 14px;
-            padding: 3px 8px;
-            border-top-left-radius: 4px;
+            background: #ffffff;
+            border-bottom: 1px solid #3C4852;
+            padding-bottom: 8px;
         }
 
         .card-title {
-            font-size: 12px;
-            font-weight: 800;
-            color: #334155;
-            margin-bottom: 6px;
-            line-height: 1.2;
-            padding-right: 20px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #515457;
+            margin-bottom: 8px;
+            line-height: 1.3;
         }
 
-        /* FILAS DE DATA */
-        .row-data {
+        .resp-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 11.5px;
+        }
+
+        .resp-text {
+            color: #515457;
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 1.3;
+            max-width: 75%;
+        }
+
+        .resp-val {
+            font-weight: 800;
+            font-size: 12.5px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* ESTILOS DE NACIONALIDAD (TOMA TUS CLASES EXACTAS DE BASE.HTML) */
+        .nation-card {
+            border-bottom: 1px solid #3C4852;
+            padding-bottom: 10px;
+        }
+
+        .nation-flex {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+            margin-top: 6px;
+        }
+
+        .nation-col-left {
+            width: 38%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            border-right: 2px solid #e2e8f0;
+            padding-right: 8px;
+        }
+
+        .nat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 6px 0;
+        }
+
+        .nat-icon {
+            font-size: 22px;
+            color: #10529d;
+            width: 26px;
+            text-align: center;
+        }
+
+        .nat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .nat-val {
+            font-size: 14px;
+            font-weight: 900;
+            color: #10529d;
+        }
+
+        .nation-col-right {
+            width: 62%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .nat-subgroup {
+            padding-bottom: 4px;
+        }
+
+        .nat-subrow {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 11px;
-            margin-bottom: 4px;
+            padding: 3px 0;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .row-label { font-weight: 600; color: #475569; }
-        .row-val { font-weight: 800; color: #8968c2; }
 
-        /* CONECTOR 12 -> 13 & 14 */
+        .nat-subrow .resp-text {
+            font-weight: 600;
+        }
+
+        .nat-subrow .resp-val {
+            font-size: 12px;
+            color: #10529d;
+            font-weight: 800;
+        }
+
+        /* ESTRUCTURA CONECTOR PREGUNTA 12 -> 13 & 14 */
         .card-12-options {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-top: 8px;
+            justify-content: space-around;
+            margin-top: 6px;
         }
-        .opt-item { text-align: center; font-size: 10px; flex: 1; }
-        .opt-item strong { display: block; font-size: 11px; color: #8968c2; }
-        
-        .tree-connector-12 {
+
+        .opt-box {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .opt-box strong {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 800;
+        }
+
+        .tree-line-12 {
             width: 100%;
-            height: 25px;
+            height: 20px;
             margin: 2px 0;
         }
 
-        /* PREGUNTA 15 Y CONECTOR RAMIFICADO */
-        .card-15-container {
+        /* ESTRUCTURA PREGUNTA 15 Y CONEXIÓN VERTICAL CON 16 Y 17 */
+        .p15-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 15px;
         }
-        .donut-chart-img { width: 65px; height: 65px; }
 
-        .flex-row-connected {
+        .flow-connect-container {
             display: flex;
+            align-items: stretch;
+            margin-top: 10px;
             gap: 10px;
-            position: relative;
         }
-        .side-line-15 {
-            width: 45px;
+
+        .flow-labels-col {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            justify-content: space-around;
+            text-align: right;
+            padding-right: 5px;
+            min-width: 55px;
+        }
+
+        .flow-label-item {
+            font-size: 12px;
+            font-weight: 800;
+            color: #10529d;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .flow-label-item span {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .flow-bracket-svg {
+            width: 16px;
+            height: 100%;
+            min-height: 180px;
+        }
+
+        .flow-cards-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 15px;
         }
 
         /* FOOTER */
@@ -128,12 +277,13 @@
             background: #10529d;
             color: #ffffff;
             text-align: center;
-            padding: 8px;
-            font-size: 13px;
+            padding: 10px;
+            font-size: 15px;
             font-weight: 700;
-            margin-top: 15px;
+            margin-top: 25px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+            width: 100%;
         }
     </style>
 </head>
@@ -143,157 +293,141 @@
 
     <!-- ENCABEZADO -->
     <div class="header">
-        <div class="header-logo">MÁS CHIHUAHUA | SECRETARÍA DE TURISMO</div>
+        <div class="header-logo-left">
+            <img width="250px" src="https://sichitur.org/perfil_visitante/_images/logo.png" alt="Logo Turismo" />
+        </div>
         <div class="header-title">
-            <h1>PERFIL DEL VISITANTE DE {{ municipio }}</h1>
+            <h1>PERFIL DEL VISITANTE DE <span style="font-weight: 900;">{{ municipio.upper() }}</span></h1>
             <h2>ACUMULADO {{ fecha_inicio }} - {{ fecha_fin }}</h2>
         </div>
-        <div class="header-logo right">SICHITUR</div>
+        <div class="header-logo-right">
+            <img width="185px" src="https://sichitur.org/perfil_visitante/_images/sichitur.png" alt="Sichitur" />
+        </div>
     </div>
 
-    <!-- RETÍCULA DE 4 COLUMNAS -->
-    <div class="grid-container">
+    <!-- GRID 4 COLUMNAS -->
+    <div class="main-grid">
 
-        <!-- COLUMNA 1 -->
-        <div class="col">
-            {% if p[1] %}
-            <div class="card">
-                <div class="card-title">{{ p[1].preg_name }}</div>
-                {% for r in p[1].respuestas %}
-                <div class="row-data">
-                    <span class="row-label">{{ r.respuesta }}</span>
-                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
-                </div>
-                {% endfor %}
-                <div class="card-num">1</div>
-            </div>
-            {% endif %}
-
-            {% if p[2] %}
-            <div class="card">
-                <div class="card-title">{{ p[2].preg_name }}</div>
-                {% for r in p[2].respuestas %}
-                <div class="row-data">
-                    <span class="row-label">{{ r.respuesta }}</span>
-                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
-                </div>
-                {% endfor %}
-                <div class="card-num">2</div>
-            </div>
-            {% endif %}
-
-            {% if p[3] %}
-            <div class="card">
-                <div class="card-title">{{ p[3].preg_name }}</div>
-                {% for r in p[3].respuestas %}
-                <div class="row-data">
-                    <span class="row-label">{{ r.respuesta }}</span>
-                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
-                </div>
-                {% endfor %}
-                <div class="card-num">3</div>
-            </div>
-            {% endif %}
-
-            {% if p[4] %}
-            <div class="card">
-                <div class="card-title">{{ p[4].preg_name }}</div>
-                {% if p[5] %}
-                <div style="font-size: 10px; font-weight:700; margin-top:4px;">Nacional:</div>
-                {% for r in p[5].respuestas %}
-                <div class="row-data">
-                    <span class="row-label">{{ r.respuesta }}</span>
-                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
-                </div>
-                {% endfor %}
-                {% endif %}
-                
-                {% if p[6] %}
-                <div style="font-size: 10px; font-weight:700; margin-top:4px;">Internacional:</div>
-                {% for r in p[6].respuestas %}
-                <div class="row-data">
-                    <span class="row-label">{{ r.respuesta }}</span>
-                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
-                </div>
-                {% endfor %}
-                {% endif %}
-                <div class="card-num">4</div>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- COLUMNA 2 -->
-        <div class="col">
-            {% for idx in [7, 8, 9, 10, 11] %}
+        <!-- COLUMNA 1: Preguntas 1, 2, 3 y NACIONALIDAD INTEGRADA -->
+        <div class="column">
+            {% for idx in [1, 2, 3] %}
                 {% if p[idx] %}
                 <div class="card">
                     <div class="card-title">{{ p[idx].preg_name }}</div>
                     {% for r in p[idx].respuestas %}
-                    <div class="row-data">
-                        <span class="row-label">{{ r.respuesta }}</span>
-                        <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                    <div class="resp-row">
+                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <span class="resp-val" style="color: {{ p[idx].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
-                    <div class="card-num">{{ idx }}</div>
                 </div>
                 {% endif %}
             {% endfor %}
 
-            {% if p[18] %}
-            <div class="card">
-                <div class="card-title">{{ p[18].preg_name }}</div>
-                {% for r in p[18].respuestas %}
-                <div class="row-data">
-                    <span class="row-label">{{ r.respuesta }}</span>
-                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+            <!-- SECCIÓN NACIONALIDAD -->
+            {% if nacionalidad and nacionalidad.general %}
+            <div class="card nation-card">
+                <div class="card-title">Nacionalidad</div>
+                <div class="nation-flex">
+                    <!-- Izquierda: Totales (Nacional e Internacional) -->
+                    <div class="nation-col-left">
+                        {% for r in nacionalidad.general.respuestas %}
+                            <div class="nat-item">
+                                {% if loop.first %}
+                                    <i class="fa-solid fa-map-location-dot nat-icon"></i>
+                                    <span class="nat-label">{{ r.respuesta }}</span>
+                                    <span class="nat-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                {% else %}
+                                    <i class="fa-solid fa-earth-americas nat-icon"></i>
+                                    <span class="nat-label">{{ r.respuesta }}</span>
+                                    <span class="nat-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Derecha: Desglose México e Internacional -->
+                    <div class="nation-col-right">
+                        {% if nacionalidad.mexico %}
+                        <div class="nat-subgroup">
+                            {% for r in nacionalidad.mexico.respuestas %}
+                                <div class="nat-subrow">
+                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                    <span class="resp-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div style="border-bottom: 2px solid #cbd5e1; margin: 4px 0;"></div>
+
+                        {% if nacionalidad.internacional %}
+                        <div class="nat-subgroup">
+                            {% for r in nacionalidad.internacional.respuestas %}
+                                <div class="nat-subrow">
+                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                    <span class="resp-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% endfor %}
-                <div class="card-num">18</div>
             </div>
             {% endif %}
         </div>
 
-        <!-- COLUMNA 3 & 4 (COMPARTIDA PARA 12, 13, 14, 15, 16, 17) -->
-        <div class="col" style="grid-column: span 2;">
-            
-            <!-- SECCIÓN CONECTADA 12 -> 13 & 14 -->
+        <!-- COLUMNA 2: Preguntas 7, 8, 9, 10, 11 y 18 -->
+        <div class="column">
+            {% for idx in [7, 8, 9, 10, 11, 18] %}
+                {% if p[idx] %}
+                <div class="card">
+                    <div class="card-title">{{ p[idx].preg_name }}</div>
+                    {% for r in p[idx].respuestas %}
+                    <div class="resp-row">
+                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <span class="resp-val" style="color: {{ p[idx].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- COLUMNAS 3 Y 4 UNIFICADAS (Trabajo 12->13,14, Actividades 15->16,17 y 19,20) -->
+        <div class="column" style="grid-column: span 2;">
+
+            <!-- SECCIÓN PREGUNTA 12 -->
             {% if p[12] %}
             <div class="card">
                 <div class="card-title">{{ p[12].preg_name }}</div>
                 <div class="card-12-options">
                     {% for r in p[12].respuestas %}
-                    <div class="opt-item">
+                    <div class="opt-box">
                         <span>{{ r.respuesta }}</span>
-                        <strong>{{ "%.0f"|format(r.porcentaje) }}%</strong>
+                        <strong style="color: {{ p[12].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</strong>
                     </div>
                     {% endfor %}
                 </div>
-                <div class="card-num">12</div>
             </div>
 
-            <!-- SVG LÍNEA CONECTORA HACIA 13 Y 14 -->
-            <svg class="tree-connector-12" viewBox="0 0 100 25" preserveAspectRatio="none">
-                <!-- Línea vertical saliendo de la 2da opción (Trabajo/Negocios ~ 37%) -->
-                <line x1="37" y1="0" x2="37" y2="12" stroke="#a3b899" stroke-width="2"/>
-                <!-- Línea horizontal distribuida -->
-                <line x1="22" y1="12" x2="78" y2="12" stroke="#a3b899" stroke-width="2"/>
-                <!-- Ramas hacia abajo -->
-                <line x1="22" y1="12" x2="22" y2="25" stroke="#a3b899" stroke-width="2"/>
-                <line x1="78" y1="12" x2="78" y2="25" stroke="#a3b899" stroke-width="2"/>
+            <svg class="tree-line-12" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <line x1="50" y1="0" x2="50" y2="10" stroke="#a3b899" stroke-width="2"/>
+                <line x1="25" y1="10" x2="75" y2="10" stroke="#a3b899" stroke-width="2"/>
+                <line x1="25" y1="10" x2="25" y2="20" stroke="#a3b899" stroke-width="2"/>
+                <line x1="75" y1="10" x2="75" y2="20" stroke="#a3b899" stroke-width="2"/>
             </svg>
 
-            <!-- SUB-GRID PARA 13 Y 14 -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 {% if p[13] %}
                 <div class="card">
                     <div class="card-title">{{ p[13].preg_name }}</div>
                     {% for r in p[13].respuestas %}
-                    <div class="row-data">
-                        <span class="row-label">{{ r.respuesta }}</span>
-                        <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                    <div class="resp-row">
+                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <span class="resp-val" style="color: {{ p[13].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
-                    <div class="card-num">13</div>
                 </div>
                 {% endif %}
 
@@ -301,90 +435,102 @@
                 <div class="card">
                     <div class="card-title">{{ p[14].preg_name }}</div>
                     {% for r in p[14].respuestas %}
-                    <div class="row-data">
-                        <span class="row-label">{{ r.respuesta }}</span>
-                        <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                    <div class="resp-row">
+                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <span class="resp-val" style="color: {{ p[14].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
-                    <div class="card-num">14</div>
                 </div>
                 {% endif %}
             </div>
             {% endif %}
 
-            <!-- SECCIÓN BLOQUE 15 -> (16 Y 17) CON LÍNEAS LATERALES -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <!-- TARJETA 15 CON GRÁFICA DE DONA -->
+            <!-- SECCIÓN PREGUNTA 15 (CONEXIÓN HACIA 16 Y 17 CON PORCENTAJES EN LINEAS) -->
+            <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; margin-top: 10px; align-items: start;">
+                <div>
                     {% if p[15] %}
                     <div class="card">
                         <div class="card-title">{{ p[15].preg_name }}</div>
-                        <div class="card-15-container">
+                        <div class="p15-container">
                             <div>
                                 {% for r in p[15].respuestas %}
-                                <div style="font-size: 11px; font-weight:700;">
-                                    {{ "%.0f"|format(r.porcentaje) }}% <span style="font-weight:400;">{{ r.respuesta }}</span>
+                                <div class="resp-row" style="gap: 12px;">
+                                    <span class="resp-val" style="color: {{ p[15].color_hex }}; font-size: 13px;">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                    <span class="resp-text" style="font-weight: 700;">{{ r.respuesta }}</span>
                                 </div>
                                 {% endfor %}
                             </div>
                             {% if grafica_dona %}
-                            <img src="data:image/png;base64,{{ grafica_dona }}" class="donut-chart-img" alt="Dona">
+                            <img src="data:image/png;base64,{{ grafica_dona }}" style="width: 75px; height: 75px;" alt="Dona">
                             {% endif %}
                         </div>
-                        <div class="card-num">15</div>
                     </div>
                     {% endif %}
 
-                    <!-- FLEX CON CONECTOR LATERAL PARA 16 Y 17 -->
-                    <div class="flex-row-connected">
-                        <div class="side-line-15">
-                            <svg width="30" height="100%" viewBox="0 0 30 150" preserveAspectRatio="none">
-                                <path d="M 0,25 L 15,25 L 15,125 L 0,125 M 15,75 L 30,75" stroke="#a3b899" stroke-width="2" fill="none" />
-                            </svg>
-                        </div>
-                        <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
-                            {% if p[16] %}
-                            <div class="card">
-                                <div class="card-title">{{ p[16].preg_name }}</div>
-                                {% for r in p[16].respuestas %}
-                                <div class="row-data">
-                                    <span class="row-label">{{ r.respuesta }}</span>
-                                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                    <!-- CONECTOR Y TARJETAS 16 Y 17 -->
+                    <div class="flow-connect-container">
+                        <!-- Porcentajes / Etiquetas del flujo (SÍ / NO) -->
+                        <div class="flow-labels-col">
+                            {% if p[15] and p[15].respuestas %}
+                                {% for r in p[15].respuestas %}
+                                <div class="flow-label-item">
+                                    {{ "%.0f"|format(r.porcentaje) }}%
+                                    <span>{{ r.respuesta.upper() }}</span>
                                 </div>
                                 {% endfor %}
-                                <div class="card-num">16</div>
+                            {% else %}
+                                <div class="flow-label-item">71% <span>SÍ</span></div>
+                                <div class="flow-label-item">29% <span>NO</span></div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Línea / Corchete Conector SVG -->
+                        <svg class="flow-bracket-svg" viewBox="0 0 16 120" preserveAspectRatio="none">
+                            <path d="M 2,25 L 12,25 L 12,95 L 2,95" fill="none" stroke="#a3b899" stroke-width="2"/>
+                            <line x1="12" y1="25" x2="16" y2="25" stroke="#a3b899" stroke-width="2"/>
+                            <line x1="12" y1="95" x2="16" y2="95" stroke="#a3b899" stroke-width="2"/>
+                        </svg>
+
+                        <!-- Tarjetas 16 y 17 -->
+                        <div class="flow-cards-col">
+                            {% if p[16] %}
+                            <div class="card">
+                                <div class="card-title" style="font-size: 12px;">{{ p[16].preg_name }}</div>
+                                {% for r in p[16].respuestas %}
+                                <div class="resp-row">
+                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                    <span class="resp-val" style="color: {{ p[16].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                </div>
+                                {% endfor %}
                             </div>
                             {% endif %}
 
                             {% if p[17] %}
                             <div class="card">
-                                <div class="card-title">{{ p[17].preg_name }}</div>
+                                <div class="card-title" style="font-size: 12px;">{{ p[17].preg_name }}</div>
                                 {% for r in p[17].respuestas %}
-                                <div class="row-data">
-                                    <span class="row-label">{{ r.respuesta }}</span>
-                                    <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                                <div class="resp-row">
+                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                    <span class="resp-val" style="color: {{ p[17].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                                 </div>
                                 {% endfor %}
-                                <div class="card-num">17</div>
                             </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
 
-                <!-- COLUMNA DERECHA (19 Y 20 OPCIONAL) -->
-                <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- COLUMNA PREGUNTAS 19 Y 20 -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% if p[19] %}
                     <div class="card">
                         <div class="card-title">{{ p[19].preg_name }}</div>
                         {% for r in p[19].respuestas %}
-                        <div class="row-data">
-                            <span class="row-label">{{ r.respuesta }}</span>
-                            <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                        <div class="resp-row">
+                            <span class="resp-text">{{ r.respuesta }}</span>
+                            <span class="resp-val" style="color: {{ p[19].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                         </div>
                         {% endfor %}
-                        <div class="card-num">19</div>
                     </div>
                     {% endif %}
 
@@ -392,16 +538,14 @@
                     <div class="card">
                         <div class="card-title">{{ p[20].preg_name }}</div>
                         {% for r in p[20].respuestas %}
-                        <div class="row-data">
-                            <span class="row-label">{{ r.respuesta }}</span>
-                            <span class="row-val">{{ "%.0f"|format(r.porcentaje) }}%</span>
+                        <div class="resp-row">
+                            <span class="resp-text">{{ r.respuesta }}</span>
+                            <span class="resp-val" style="color: {{ p[20].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                         </div>
                         {% endfor %}
-                        <div class="card-num">20</div>
                     </div>
                     {% endif %}
                 </div>
-
             </div>
 
         </div>
@@ -410,7 +554,7 @@
 
     <!-- PIE DE PÁGINA -->
     <div class="footer">
-        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio }}
+        FUENTE: SECRETARÍA DE TURISMO CON INFORMACIÓN RECOPILADA DE ENCUESTAS PERFIL DEL VISITANTE DE {{ municipio.upper() }}
     </div>
 
 </div>
