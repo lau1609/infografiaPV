@@ -168,7 +168,7 @@ async def procesar_infografia(payload: PayloadInfografia):
             f"Error procesando infografía: {str(e)}", exc_info=True
         )
         raise HTTPException(
-            status_code=500 detail=f"Error en servidor Python: {str(e)}"
+            status_code=500, detail=f"Error en servidor Python: {str(e)}"
         )
         
 
