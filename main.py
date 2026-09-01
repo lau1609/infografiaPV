@@ -7,10 +7,11 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-from fastapi import FastAPI, Response, HTTPException
+from fastapi import FastAPI, Response, HTTPException,Request
 from pydantic import BaseModel
 from jinja2 import Environment, FileSystemLoader
 from playwright.async_api import async_playwright
+import requests, cairosvg
 
 app = FastAPI(title="Generador de Infografías - Turismo")
 env = Environment(loader=FileSystemLoader("templates"))
@@ -43,7 +44,7 @@ class PayloadInfografia(BaseModel):
 @app.post("/generar-infografia")
 async def procesar_infografia(payload: PayloadInfografia):
     try:
-        COLORES = ['#8968c2', '#10529d', '#d0196b']
+        COLORES = ["#8968c2", "#10529d", "#d0196b"]
         color_index = 0
 
         data = payload.dict()
@@ -54,40 +55,91 @@ async def procesar_infografia(payload: PayloadInfografia):
             "titulo": "PERFIL DEL VISITANTE",
             "periodo": "ACUMULADO 2026",
             "columnas": {1: [], 2: [], 3: [], 4: []},
-            "nacionalidad": {"general": None, "mexico": None, "internacional": None}
+            "nacionalidad": {
+                "general": None,
+                "mexico": None,
+                "internacional": None,
+            },
         }
 
-        for preg in data["preguntas"]:
-            preg['preg_name'] = preg.get('preg_name') or preg.get('titulo') or ""
-            part = preg.get('preg_part_infog') or preg.get('columna') or 1
+        # Cliente HTTP asíncrono para descargar las imágenes SVG eficientemente
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            for preg in data["preguntas"]:
+                preg["preg_name"] = (
+                    preg.get("preg_name") or preg.get("titulo") or ""
+                )
+                part = (
+                    preg.get("preg_part_infog") or preg.get("columna") or 1
+                )
 
-            for resp in preg['respuestas']:
-                if not resp.get('respuesta') and resp.get('texto'):
-                    resp['respuesta'] = resp['texto']
+                # Asignar color dinámico por pregunta primero
+                color_actual = COLORES[color_index % len(COLORES)]
+                preg["color_hex"] = color_actual
 
-            respuestas_ordenadas = sorted(preg['respuestas'], key=lambda x: x['porcentaje'], reverse=True)
-            respuestas_filtradas = []
-            porcentaje_acumulado = 0
+                for resp in preg["respuestas"]:
+                    if not resp.get("respuesta") and resp.get("texto"):
+                        resp["respuesta"] = resp["texto"]
 
-            for idx, resp in enumerate(respuestas_ordenadas, start=1):
-                if porcentaje_acumulado < 75 or idx <= 2:
-                    porcentaje_acumulado += resp['porcentaje']
-                    respuestas_filtradas.append(resp)
-                else:
-                    break
-            
-            preg['respuestas'] = respuestas_filtradas
-            preg['color_hex'] = COLORES[color_index % len(COLORES)]
-            
-            if part in [1, 2, 3, 4]:
-                resultado['columnas'][part].append(preg)
-                color_index += 1
-            elif part == 5:
-                resultado['nacionalidad']['general'] = preg
-            elif part == 6:
-                resultado['nacionalidad']['mexico'] = preg
-            elif part == 7:
-                resultado['nacionalidad']['internacional'] = preg
+                    # --- MODIFICACIÓN DE SVG E INYECCIÓN BASE64 ---
+                    url_icono = resp.get("icono")
+                    if url_icono and url_icono.endswith(".svg"):
+                        try:
+                            res = await client.get(url_icono)
+                            if res.status_code == 200:
+                                svg_text = res.text
+
+                                # Reemplazar 'fill="#000000"' o cualquier 'fill="..."' por el color asignado
+                                if 'fill="' in svg_text:
+                                    svg_modificado = re.sub(
+                                        r'fill="[^"]*"',
+                                        f'fill="{color_actual}"',
+                                        svg_text,
+                                    )
+                                else:
+                                    # Si el SVG no tiene fill definido en la etiqueta raíz, se agrega al final
+                                    svg_modificado = svg_text.replace(
+                                        "<svg", f'<svg fill="{color_actual}"'
+                                    )
+
+                                # Convertir el SVG modificado a cadena Base64 para HTML
+                                base64_svg = base64.b64encode(
+                                    svg_modificado.encode("utf-8")
+                                ).decode("utf-8")
+                                resp["icono"] = (
+                                    f"data:image/svg+xml;base64,{base64_svg}"
+                                )
+                        except Exception as err_icon:
+                            logging.warning(
+                                f"No se pudo procesar el icono {url_icono}: {err_icon}"
+                            )
+                    # ---------------------------------------------
+
+                respuestas_ordenadas = sorted(
+                    preg["respuestas"],
+                    key=lambda x: x["porcentaje"],
+                    reverse=True,
+                )
+                respuestas_filtradas = []
+                porcentaje_acumulado = 0
+
+                for idx, resp in enumerate(respuestas_ordenadas, start=1):
+                    if porcentaje_acumulado < 75 or idx <= 2:
+                        porcentaje_acumulado += resp["porcentaje"]
+                        respuestas_filtradas.append(resp)
+                    else:
+                        break
+
+                preg["respuestas"] = respuestas_filtradas
+
+                if part in [1, 2, 3, 4]:
+                    resultado["columnas"][part].append(preg)
+                    color_index += 1
+                elif part == 5:
+                    resultado["nacionalidad"]["general"] = preg
+                elif part == 6:
+                    resultado["nacionalidad"]["mexico"] = preg
+                elif part == 7:
+                    resultado["nacionalidad"]["internacional"] = preg
 
         template = env.get_template("base.html")
         html_content = template.render(**resultado)
@@ -95,26 +147,29 @@ async def procesar_infografia(payload: PayloadInfografia):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(
-                viewport={"width": 1450, "height": 1350},
-                device_scale_factor=3
+                viewport={"width": 1450, "height": 1350}, device_scale_factor=3
             )
             page = await context.new_page()
             await page.set_content(html_content, wait_until="networkidle")
             await page.evaluate("document.fonts.ready")
-        
+
             element = page.locator("#infografia")
             if await element.count() > 0:
                 image_bytes = await element.screenshot(type="png")
             else:
                 image_bytes = await page.screenshot(type="png", full_page=True)
-        
+
             await browser.close()
-        
+
         return Response(content=image_bytes, media_type="image/png")
 
     except Exception as e:
-        logging.error(f"Error procesando infografía: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Error en servidor Python: {str(e)}")
+        logging.error(
+            f"Error procesando infografía: {str(e)}", exc_info=True
+        )
+        raise HTTPException(
+            status_code=500 detail=f"Error en servidor Python: {str(e)}"
+        )
         
 
 @app.post("/generar-infografia-esp")
