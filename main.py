@@ -11,7 +11,6 @@ from fastapi import FastAPI, Response, HTTPException,Request
 from pydantic import BaseModel
 from jinja2 import Environment, FileSystemLoader
 from playwright.async_api import async_playwright
-import requests, cairosvg
 
 app = FastAPI(title="Generador de Infografías - Turismo")
 env = Environment(loader=FileSystemLoader("templates"))
