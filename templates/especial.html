@@ -390,11 +390,11 @@
             <!-- SVG con conector dinámico alineado al porcentaje de Trabajo/negocios -->
             {% set total_opts = p[12].respuestas|length %}
             {% set pct_x = ((idx_trabajo_12 + 0.5) / total_opts) * 100 %}
-            <svg class="tree-line-12" style="width: 100%; height: 22px; margin: 2px 0;" viewBox="0 0 100 22" preserveAspectRatio="none">
-                <line x1="{{ pct_x }}" y1="0" x2="{{ pct_x }}" y2="10" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
-                <line x1="25" y1="10" x2="75" y2="10" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
-                <line x1="25" y1="10" x2="25" y2="22" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
-                <line x1="75" y1="10" x2="75" y2="22" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
+            <svg class="tree-line-12" style="width: 100%; height: 22px; margin-top: -5px;" viewBox="0 0 100 22" preserveAspectRatio="none">
+                <line x1="{{ pct_x }}" y1="0" x2="{{ pct_x }}" y2="10" stroke="#C2C2C2" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                <line x1="25" y1="10" x2="75" y2="10" stroke="#C2C2C2" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                <line x1="25" y1="10" x2="25" y2="22" stroke="#C2C2C2" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                <line x1="75" y1="10" x2="75" y2="22" stroke="#C2C2C2" stroke-width="2" vector-effect="non-scaling-stroke"/>
             </svg>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
