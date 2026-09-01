@@ -375,7 +375,7 @@
             
             <!-- PREGUNTA 12 Y RAMIFICACIÓN SVG DINÁMICA -->
             {% if p[12] %}
-            <div class="card" style="border-bottom: 1px solid white !important;">
+            <div class="card" style="border-bottom: 1px solid white !important; padding-bottom: 0px !important;">
                 <div class="card-title">{{ p[12].preg_name }}</div>
                 <div class="card-12-options">
                     {% for r in p[12].respuestas %}
@@ -391,10 +391,10 @@
             {% set total_opts = p[12].respuestas|length %}
             {% set pct_x = ((idx_trabajo_12 + 0.5) / total_opts) * 100 %}
             <svg class="tree-line-12" style="width: 100%; height: 22px; margin: 2px 0;" viewBox="0 0 100 22" preserveAspectRatio="none">
-                <line x1="{{ pct_x }}" y1="0" x2="{{ pct_x }}" y2="10" stroke="#556773" stroke-width="2"/>
-                <line x1="25" y1="10" x2="75" y2="10" stroke="#556773" stroke-width="2"/>
-                <line x1="25" y1="10" x2="25" y2="22" stroke="#556773" stroke-width="2"/>
-                <line x1="75" y1="10" x2="75" y2="22" stroke="#556773" stroke-width="2"/>
+                <line x1="{{ pct_x }}" y1="0" x2="{{ pct_x }}" y2="10" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                <line x1="25" y1="10" x2="75" y2="10" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                <line x1="25" y1="10" x2="25" y2="22" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                <line x1="75" y1="10" x2="75" y2="22" stroke="#a3b899" stroke-width="2" vector-effect="non-scaling-stroke"/>
             </svg>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
@@ -429,12 +429,12 @@
                 <div style="display: flex; flex-direction: column;">
                     
                     {% if p[15] %}
-                    <div class="card">
+                    <div class="card" style="border-bottom: 1px solid white !important;">
                         <div class="card-title">{{ p[15].preg_name }}</div>
                         <div class="donut-block">
                             
                             {% if grafica_dona %}
-                            <img src="data:image/png;base64,{{ grafica_dona }}" style="width: 75px; height: 75px;" alt="Dona">
+                            <img src="data:image/png;base64,{{ grafica_dona }}" style="width: 85px; height: 85px;" alt="Dona">
                             {% endif %}
                         </div>
                     </div>
@@ -455,10 +455,7 @@
                             {% endif %}
                         </div>
 
-                        <!-- Corchete de división en SVG -->
-                        <svg class="side-bracket-svg" viewBox="0 0 16 140" preserveAspectRatio="none">
-                            <path d="M 14,20 L 6,20 L 6,70 L 1,70 L 6,70 L 6,120 L 14,120" fill="none" stroke="#556773" stroke-width="2"/>
-                        </svg>
+                        
 
                         <!-- Tarjetas 16 (Sí) y 17 (No) -->
                         <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
