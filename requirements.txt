@@ -4,3 +4,5 @@ jinja2
 playwright
 matplotlib
 pydantic
+requests
+cairosvg
