@@ -76,44 +76,44 @@ async def procesar_infografia(payload: PayloadInfografia):
                 if not resp.get("respuesta") and resp.get("texto"):
                     resp["respuesta"] = resp["texto"]
 
-                # --- PROCESAMIENTO CON CAIROSVG ---
+                # --- PROCESAMIENTO NATIVO DE SVG (SIN CAIROSVG) ---
                 url_icono = resp.get("icono")
-                if url_icono:
+                if url_icono and url_icono.endswith(".svg"):
                     try:
-                        # 1. Obtenemos el texto del SVG
-                        res = requests.get(url_icono, timeout=5)
-                        if res.status_code == 200:
-                            svg_data = res.text
+                        # 1. Obtener el texto del SVG con la librería estándar urllib
+                        req = urllib.request.Request(
+                            url_icono, headers={"User-Agent": "Mozilla/5.0"}
+                        )
+                        with urllib.request.urlopen(
+                            req, timeout=5
+                        ) as response:
+                            svg_data = response.read().decode("utf-8")
 
-                            # 2. Reemplazamos el color de fill
-                            if 'fill="' in svg_data:
-                                svg_modificado = re.sub(
-                                    r'fill="[^"]*"',
-                                    f'fill="{color_actual}"',
-                                    svg_data,
-                                )
-                            else:
-                                svg_modificado = svg_data.replace(
-                                    "<svg", f'<svg fill="{color_actual}"'
-                                )
-
-                            # 3. Convertimos el SVG a bytes PNG usando CairoSVG
-                            png_bytes = cairosvg.svg2png(
-                                bytestring=svg_modificado.encode("utf-8")
+                        # 2. Reemplazar o inyectar el color de fill
+                        if 'fill="' in svg_data:
+                            svg_modificado = re.sub(
+                                r'fill="[^"]*"',
+                                f'fill="{color_actual}"',
+                                svg_data,
+                            )
+                        else:
+                            svg_modificado = svg_data.replace(
+                                "<svg", f'<svg fill="{color_actual}"'
                             )
 
-                            # 4. Codificamos a Base64 para pasarlo al HTML
-                            png_base64 = base64.b64encode(png_bytes).decode(
-                                "utf-8"
-                            )
-                            resp["icono"] = (
-                                f"data:image/png;base64,{png_base64}"
-                            )
+                        # 3. Convertir a Data URI SVG en Base64
+                        svg_base64 = base64.b64encode(
+                            svg_modificado.encode("utf-8")
+                        ).decode("utf-8")
+                        resp["icono"] = (
+                            f"data:image/svg+xml;base64,{svg_base64}"
+                        )
+
                     except Exception as err_icon:
                         logging.warning(
-                            f"No se pudo convertir el SVG con CairoSVG ({url_icono}): {err_icon}"
+                            f"No se pudo procesar el SVG ({url_icono}): {err_icon}"
                         )
-                # -----------------------------------
+                # --------------------------------------------------
 
             # Filtrar y ordenar respuestas al 75%
             respuestas_ordenadas = sorted(
@@ -157,7 +157,9 @@ async def procesar_infografia(payload: PayloadInfografia):
             if await element.count() > 0:
                 image_bytes = await element.screenshot(type="png")
             else:
-                image_bytes = await page.screenshot(type="png", full_page=True)
+                image_bytes = await page.screenshot(
+                    type="png", full_page=True
+                )
 
             await browser.close()
 
