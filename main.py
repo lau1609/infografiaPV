@@ -62,84 +62,84 @@ async def procesar_infografia(payload: PayloadInfografia):
             },
         }
 
-        # Cliente HTTP asíncrono para descargar las imágenes SVG eficientemente
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            for preg in data["preguntas"]:
-                preg["preg_name"] = (
-                    preg.get("preg_name") or preg.get("titulo") or ""
-                )
-                part = (
-                    preg.get("preg_part_infog") or preg.get("columna") or 1
-                )
+        for preg in data["preguntas"]:
+            preg["preg_name"] = (
+                preg.get("preg_name") or preg.get("titulo") or ""
+            )
+            part = preg.get("preg_part_infog") or preg.get("columna") or 1
 
-                # Asignar color dinámico por pregunta primero
-                color_actual = COLORES[color_index % len(COLORES)]
-                preg["color_hex"] = color_actual
+            # Definir el color de la pregunta
+            color_actual = COLORES[color_index % len(COLORES)]
+            preg["color_hex"] = color_actual
 
-                for resp in preg["respuestas"]:
-                    if not resp.get("respuesta") and resp.get("texto"):
-                        resp["respuesta"] = resp["texto"]
+            for resp in preg["respuestas"]:
+                if not resp.get("respuesta") and resp.get("texto"):
+                    resp["respuesta"] = resp["texto"]
 
-                    # --- MODIFICACIÓN DE SVG E INYECCIÓN BASE64 ---
-                    url_icono = resp.get("icono")
-                    if url_icono and url_icono.endswith(".svg"):
-                        try:
-                            res = await client.get(url_icono)
-                            if res.status_code == 200:
-                                svg_text = res.text
+                # --- PROCESAMIENTO CON CAIROSVG ---
+                url_icono = resp.get("icono")
+                if url_icono:
+                    try:
+                        # 1. Obtenemos el texto del SVG
+                        res = requests.get(url_icono, timeout=5)
+                        if res.status_code == 200:
+                            svg_data = res.text
 
-                                # Reemplazar 'fill="#000000"' o cualquier 'fill="..."' por el color asignado
-                                if 'fill="' in svg_text:
-                                    svg_modificado = re.sub(
-                                        r'fill="[^"]*"',
-                                        f'fill="{color_actual}"',
-                                        svg_text,
-                                    )
-                                else:
-                                    # Si el SVG no tiene fill definido en la etiqueta raíz, se agrega al final
-                                    svg_modificado = svg_text.replace(
-                                        "<svg", f'<svg fill="{color_actual}"'
-                                    )
-
-                                # Convertir el SVG modificado a cadena Base64 para HTML
-                                base64_svg = base64.b64encode(
-                                    svg_modificado.encode("utf-8")
-                                ).decode("utf-8")
-                                resp["icono"] = (
-                                    f"data:image/svg+xml;base64,{base64_svg}"
+                            # 2. Reemplazamos el color de fill
+                            if 'fill="' in svg_data:
+                                svg_modificado = re.sub(
+                                    r'fill="[^"]*"',
+                                    f'fill="{color_actual}"',
+                                    svg_data,
                                 )
-                        except Exception as err_icon:
-                            logging.warning(
-                                f"No se pudo procesar el icono {url_icono}: {err_icon}"
+                            else:
+                                svg_modificado = svg_data.replace(
+                                    "<svg", f'<svg fill="{color_actual}"'
+                                )
+
+                            # 3. Convertimos el SVG a bytes PNG usando CairoSVG
+                            png_bytes = cairosvg.svg2png(
+                                bytestring=svg_modificado.encode("utf-8")
                             )
-                    # ---------------------------------------------
 
-                respuestas_ordenadas = sorted(
-                    preg["respuestas"],
-                    key=lambda x: x["porcentaje"],
-                    reverse=True,
-                )
-                respuestas_filtradas = []
-                porcentaje_acumulado = 0
+                            # 4. Codificamos a Base64 para pasarlo al HTML
+                            png_base64 = base64.b64encode(png_bytes).decode(
+                                "utf-8"
+                            )
+                            resp["icono"] = (
+                                f"data:image/png;base64,{png_base64}"
+                            )
+                    except Exception as err_icon:
+                        logging.warning(
+                            f"No se pudo convertir el SVG con CairoSVG ({url_icono}): {err_icon}"
+                        )
+                # -----------------------------------
 
-                for idx, resp in enumerate(respuestas_ordenadas, start=1):
-                    if porcentaje_acumulado < 75 or idx <= 2:
-                        porcentaje_acumulado += resp["porcentaje"]
-                        respuestas_filtradas.append(resp)
-                    else:
-                        break
+            # Filtrar y ordenar respuestas al 75%
+            respuestas_ordenadas = sorted(
+                preg["respuestas"], key=lambda x: x["porcentaje"], reverse=True
+            )
+            respuestas_filtradas = []
+            porcentaje_acumulado = 0
 
-                preg["respuestas"] = respuestas_filtradas
+            for idx, resp in enumerate(respuestas_ordenadas, start=1):
+                if porcentaje_acumulado < 75 or idx <= 2:
+                    porcentaje_acumulado += resp["porcentaje"]
+                    respuestas_filtradas.append(resp)
+                else:
+                    break
 
-                if part in [1, 2, 3, 4]:
-                    resultado["columnas"][part].append(preg)
-                    color_index += 1
-                elif part == 5:
-                    resultado["nacionalidad"]["general"] = preg
-                elif part == 6:
-                    resultado["nacionalidad"]["mexico"] = preg
-                elif part == 7:
-                    resultado["nacionalidad"]["internacional"] = preg
+            preg["respuestas"] = respuestas_filtradas
+
+            if part in [1, 2, 3, 4]:
+                resultado["columnas"][part].append(preg)
+                color_index += 1
+            elif part == 5:
+                resultado["nacionalidad"]["general"] = preg
+            elif part == 6:
+                resultado["nacionalidad"]["mexico"] = preg
+            elif part == 7:
+                resultado["nacionalidad"]["internacional"] = preg
 
         template = env.get_template("base.html")
         html_content = template.render(**resultado)
