@@ -182,7 +182,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
                 startangle=90,
                 counterclock=False,
                 wedgeprops=dict(edgecolor='white', linewidth=1.5),
-                textprops=dict(color='white', fontweight='bold', fontsize=9, ha='center', va='center')
+                textprops=dict(color='white', fontweight='bold', fontsize=12, ha='center', va='center')
             )
             
             buf = io.BytesIO()
