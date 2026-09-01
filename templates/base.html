@@ -332,7 +332,9 @@
                             {% for r in preg.respuestas %}
                                 <div class="resp-row {% if loop.first %}highlight{% endif %}">
                                     <div class="resp-left">
-                                        <i class="fa-solid fa-angle-right resp-icon" style="color: {{ preg.color_hex }};"></i>
+                                        {% if r.icono %}
+                                          <img src="{{ r.icono }}" class="resp-icon" style="width: 20px; height: 20px;" />
+                                        {% endif %}
                                         <span class="resp-text">{{ r.respuesta }}</span>
                                     </div>
                                     <!-- Color dinámico alternado asignado desde Python -->
