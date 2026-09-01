@@ -432,14 +432,7 @@
                     <div class="card">
                         <div class="card-title">{{ p[15].preg_name }}</div>
                         <div class="donut-block">
-                            <div style="flex: 1;">
-                                {% for r in p[15].respuestas %}
-                                <div class="resp-row" style="justify-content: flex-start; gap: 10px;">
-                                    <span class="resp-val" style="color: {{ p[15].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
-                                    <span class="resp-text">{{ r.respuesta }}</span>
-                                </div>
-                                {% endfor %}
-                            </div>
+                            
                             {% if grafica_dona %}
                             <img src="data:image/png;base64,{{ grafica_dona }}" style="width: 75px; height: 75px;" alt="Dona">
                             {% endif %}
