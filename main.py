@@ -76,19 +76,21 @@ async def procesar_infografia(payload: PayloadInfografia):
                     resp["respuesta"] = resp["texto"]
 
                 # --- PROCESAMIENTO NATIVO DE SVG (SIN CAIROSVG) ---
+                # --- PROCESAMIENTO NATIVO DE SVG ---
                 url_icono = resp.get("icono")
                 if url_icono and url_icono.endswith(".svg"):
                     try:
-                        # 1. Obtener el texto del SVG con la librería estándar urllib
                         req = urllib.request.Request(
                             url_icono, headers={"User-Agent": "Mozilla/5.0"}
                         )
-                        with urllib.request.urlopen(
-                            req, timeout=5
-                        ) as response:
+                        with urllib.request.urlopen(req, timeout=5) as response:
                             svg_data = response.read().decode("utf-8")
-
-                        # 2. Reemplazar o inyectar el color de fill
+                
+                        # Inyectar el atributo xmlns si no existe para que Chromium lo renderice sin problemas
+                        if "xmlns=" not in svg_data:
+                            svg_data = svg_data.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"')
+                
+                        # Inyectar / modificar el fill
                         if 'fill="' in svg_data:
                             svg_modificado = re.sub(
                                 r'fill="[^"]*"',
@@ -99,15 +101,12 @@ async def procesar_infografia(payload: PayloadInfografia):
                             svg_modificado = svg_data.replace(
                                 "<svg", f'<svg fill="{color_actual}"'
                             )
-
-                        # 3. Convertir a Data URI SVG en Base64
-                        svg_base64 = base64.b64encode(
-                            svg_modificado.encode("utf-8")
-                        ).decode("utf-8")
-                        resp["icono"] = (
-                            f"data:image/svg+xml;base64,{svg_base64}"
-                        )
-
+                
+                        # Convertir a Data URI SVG en Base64 de forma segura
+                        svg_bytes = svg_modificado.encode("utf-8")
+                        svg_base64 = base64.b64encode(svg_bytes).decode("utf-8")
+                        resp["icono"] = f"data:image/svg+xml;base64,{svg_base64}"
+                
                     except Exception as err_icon:
                         logging.warning(
                             f"No se pudo procesar el SVG ({url_icono}): {err_icon}"
@@ -149,17 +148,30 @@ async def procesar_infografia(payload: PayloadInfografia):
                 viewport={"width": 1450, "height": 1350}, device_scale_factor=3
             )
             page = await context.new_page()
+        
+            # Cargamos el HTML esperando a que la red se estabilice
             await page.set_content(html_content, wait_until="networkidle")
+        
+            # Forzar a esperar que todas las imágenes del DOM carguen sus bytes realmente
+            await page.evaluate("""async () => {
+                const imgs = Array.from(document.images);
+                await Promise.all(imgs.map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve; // Continuar aun si una falla
+                    });
+                }));
+            }""")
+        
             await page.evaluate("document.fonts.ready")
-
+        
             element = page.locator("#infografia")
             if await element.count() > 0:
                 image_bytes = await element.screenshot(type="png")
             else:
-                image_bytes = await page.screenshot(
-                    type="png", full_page=True
-                )
-
+                image_bytes = await page.screenshot(type="png", full_page=True)
+        
             await browser.close()
 
         return Response(content=image_bytes, media_type="image/png")
