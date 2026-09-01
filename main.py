@@ -85,19 +85,27 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
                     break
 
         # Generar Gráfica de Dona en Matplotlib para la pregunta 15
+        # Generar Gráfica Circular Completa en Matplotlib para la pregunta 15
         grafica_dona_base64 = ""
         if p[15] and p[15]['respuestas']:
-            fig, ax = plt.subplots(figsize=(2.2, 2.2), subplot_kw=dict(aspect="equal"))
+            fig, ax = plt.subplots(figsize=(2.5, 2.5), subplot_kw=dict(aspect="equal"))
             
             pcts = [r['porcentaje'] for r in p[15]['respuestas']]
-            colors_dona = ['#d0196b', '#8968c2', '#10529d', '#22c55e', '#f59e0b'][:len(pcts)]
-
-            ax.pie(
-                pcts, 
-                colors=colors_dona, 
-                startangle=90, 
+            # Si quieres desplegar el texto junto al % (ej. "71%\nSÍ") o solo los valores:
+            labels = [f"{int(r['porcentaje'])}%\n{r['respuesta'].upper()}" for r in p[15]['respuestas']]
+            
+            colors_pie = ['#d0196b', '#8968c2', '#10529d', '#22c55e', '#f59e0b'][:len(pcts)]
+        
+            # Dibujar gráfica circular completa
+            wedges, texts = ax.pie(
+                pcts,
+                labels=labels,
+                labeldistance=0.55,       # Coloca el texto hacia el centro dentro de cada rebanada
+                colors=colors_pie,
+                startangle=90,
                 counterclock=False,
-                wedgeprops=dict(width=0.42, edgecolor='white', linewidth=2)
+                wedgeprops=dict(edgecolor='white', linewidth=1.5),
+                textprops=dict(color='white', fontweight='bold', fontsize=9, ha='center', va='center')
             )
             
             buf = io.BytesIO()
