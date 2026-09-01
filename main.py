@@ -143,27 +143,6 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
                 if not resp.get('respuesta') and resp.get('texto'):
                     resp['respuesta'] = resp['texto']
 
-            # --- FILTRO HASTA ALCANZAR EL 75% ---
-            # 1. Ordenamos de mayor a menor porcentaje
-            respuestas_ordenadas = sorted(
-                preg['respuestas'], 
-                key=lambda x: x.get('porcentaje', 0), 
-                reverse=True
-            )
-            
-            respuestas_filtradas = []
-            suma_porcentaje = 0.0
-
-            for resp in respuestas_ordenadas:
-                respuestas_filtradas.append(resp)
-                suma_porcentaje += resp.get('porcentaje', 0)
-                # En cuanto la suma acumulada alcance o supere el 75%, cortamos el bucle
-                if suma_porcentaje >= 75.0:
-                    break
-
-            preg['respuestas'] = respuestas_filtradas
-            # ------------------------------------
-
             if pos and 1 <= pos <= 20:
                 p[pos] = preg
 
@@ -189,6 +168,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
             fig, ax = plt.subplots(figsize=(2.5, 2.5), subplot_kw=dict(aspect="equal"))
             
             pcts = [r['porcentaje'] for r in p[15]['respuestas']]
+            # Si quieres desplegar el texto junto al % (ej. "71%\nSÍ") o solo los valores:
             labels = [f"{int(r['porcentaje'])}%\n{r['respuesta'].upper()}" for r in p[15]['respuestas']]
             
             colors_pie = ['#d0196b', '#8968c2', '#10529d', '#22c55e', '#f59e0b'][:len(pcts)]
@@ -197,7 +177,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
             wedges, texts = ax.pie(
                 pcts,
                 labels=labels,
-                labeldistance=0.55,
+                labeldistance=0.55, # Coloca el texto hacia el centro dentro de cada rebanada
                 colors=colors_pie,
                 startangle=90,
                 counterclock=False,
@@ -243,10 +223,6 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
             await browser.close()
         
         return Response(content=image_bytes, media_type="image/png")
-
-    except Exception as e:
-        logging.error(f"Error procesando infografía especial: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Error en servidor Python: {str(e)}")
 
     except Exception as e:
         logging.error(f"Error procesando infografía especial: {str(e)}", exc_info=True)
