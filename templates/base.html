@@ -113,6 +113,29 @@
             max-width: 75%;
         }
 
+        .card-body-single {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .single-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 45px; 
+        }
+        
+        .single-icon-img {
+            width: 100%;
+            max-height: 55px; 
+            object-fit: contain;
+        }
+        
+        .single-rows-container {
+            flex-grow: 1;
+        }
         .resp-icon {
             width: 14px;
             text-align: center;
@@ -325,22 +348,42 @@
                     {% endif %}
     
                     <!-- RESTO DE PREGUNTAS GENERALES DE LA COLUMNA -->
+                    <!-- RESTO DE PREGUNTAS GENERALES DE LA COLUMNA -->
                     {% for preg in columnas[col_num] %}
                         <div class="card">
                             <div class="card-title">{{ preg.preg_name }}</div>
-    
-                            {% for r in preg.respuestas %}
-                                <div class="resp-row {% if loop.first %}highlight{% endif %}">
-                                    <div class="resp-left">
-                                        {% if r.icono %}
-                                          <img src="{{ r.icono }}" alt="icono" style="width: 20px; height: 20px; min-width: 20px; object-fit: contain;" />
-                                        {% endif %}
-                                        <span class="resp-text">{{ r.respuesta }}</span>
+                    
+                            {% if preg.icono_unico %}
+                                <!-- VISTA DE ICONO ÚNICO CENTRADO Y MÁS GRANDE (Imagen 2) -->
+                                <div class="card-body-single">
+                                    <div class="single-icon-container">
+                                        <img src="{{ preg.icono_unico }}" alt="icono" class="single-icon-img" />
                                     </div>
-                                    <!-- Color dinámico alternado asignado desde Python -->
-                                    <span class="resp-val" style="color: {{ preg.color_hex }};">{{ r.porcentaje }}%</span>
+                                    <div class="single-rows-container">
+                                        {% for r in preg.respuestas %}
+                                            <div class="resp-row {% if loop.first %}highlight{% endif %}">
+                                                <div class="resp-left">
+                                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                                </div>
+                                                <span class="resp-val" style="color: {{ preg.color_hex }};">{{ r.porcentaje }}%</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            {% endfor %}
+                            {% else %}
+                                <!-- VISTA ESTÁNDAR (Icono individual por fila) -->
+                                {% for r in preg.respuestas %}
+                                    <div class="resp-row {% if loop.first %}highlight{% endif %}">
+                                        <div class="resp-left">
+                                            {% if r.icono %}
+                                                <img src="{{ r.icono }}" alt="icono" style="width: 20px; height: 20px; min-width: 20px; object-fit: contain;" />
+                                            {% endif %}
+                                            <span class="resp-text">{{ r.respuesta }}</span>
+                                        </div>
+                                        <span class="resp-val" style="color: {{ preg.color_hex }};">{{ r.porcentaje }}%</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     {% endfor %}
     
