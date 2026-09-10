@@ -266,6 +266,7 @@ async def procesar_infografia(payload: PayloadInfografia):
 @app.post("/generar-infografia-esp")
 async def procesar_infografia_especial(payload: PayloadInfografia):
     try:
+        COLORES = ["#8968c2", "#10529d", "#d0196b"]
         data = payload.dict()
 
         p: dict = {i: None for i in range(1, 21)}
@@ -276,6 +277,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
         }
 
         color_idx = 0
+        POSICIONES_ICONO_UNICO = {2, 3, 8, 11, 13, 14, 18}
 
         for preg in data["preguntas"]:
             preg["preg_name"] = (
@@ -283,13 +285,71 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
             )
             pos = preg.get("preg_part_infog") or preg.get("columna")
 
-            # Asignar color alternado a la tarjeta
-            preg["color_hex"] = COLORES[color_idx % len(COLORES)]
+            color_actual = COLORES[color_idx % len(COLORES)]
+            preg["color_hex"] = color_actual
             color_idx += 1
+
+            iconos_encontrados = []
 
             for resp in preg["respuestas"]:
                 if not resp.get("respuesta") and resp.get("texto"):
                     resp["respuesta"] = resp["texto"]
+
+                url_icono = resp.get("icono")
+                if url_icono and url_icono.lower().endswith(".svg"):
+                    try:
+                        url_limpia = urllib.parse.unquote(url_icono)
+                        url_parsed = urllib.parse.urlparse(url_limpia)
+                        path_encoded = urllib.parse.quote(url_parsed.path)
+                        url_final = urllib.parse.urlunparse(
+                            (
+                                url_parsed.scheme,
+                                url_parsed.netloc,
+                                path_encoded,
+                                url_parsed.params,
+                                url_parsed.query,
+                                url_parsed.fragment,
+                            )
+                        )
+
+                        req = urllib.request.Request(
+                            url_final, headers={"User-Agent": "Mozilla/5.0"}
+                        )
+                        with urllib.request.urlopen(req, timeout=5) as response:
+                            svg_bytes = response.read()
+                            svg_data = svg_bytes.decode(
+                                "utf-8", errors="ignore"
+                            )
+
+                        svg_modificado = cambiar_color_svg(
+                            svg_data, color_actual
+                        )
+
+                        svg_b64 = base64.b64encode(
+                            svg_modificado.encode("utf-8")
+                        ).decode("utf-8")
+                        resp["icono"] = f"data:image/svg+xml;base64,{svg_b64}"
+
+                    except Exception as err_icon:
+                        logging.warning(
+                            f"No se pudo procesar el SVG ({url_icono}): {err_icon}"
+                        )
+
+                if resp.get("icono"):
+                    iconos_encontrados.append(resp["icono"])
+
+            # Lógica para determinar icono único de la tarjeta
+            if pos in POSICIONES_ICONO_UNICO:
+                # Se asigna el icono de la primera respuesta como icono principal de la pregunta
+                preg["icono_unico"] = (
+                    preg["respuestas"][0].get("icono")
+                    if preg["respuestas"]
+                    else None
+                )
+            elif len(iconos_encontrados) == 1:
+                preg["icono_unico"] = iconos_encontrados[0]
+            else:
+                preg["icono_unico"] = None
 
             if pos and 1 <= pos <= 20:
                 p[pos] = preg
@@ -383,7 +443,21 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
                 device_scale_factor=3,
             )
             page = await context.new_page()
+
             await page.set_content(html_content, wait_until="networkidle")
+
+            # Garantizar la carga completa de las imágenes/iconos en base64 en el DOM
+            await page.evaluate("""async () => {
+                const imgs = Array.from(document.images);
+                await Promise.all(imgs.map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                    });
+                }));
+            }""")
+
             await page.evaluate("document.fonts.ready")
 
             element = page.locator("#infografia")
