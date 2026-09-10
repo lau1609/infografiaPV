@@ -277,7 +277,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
         }
 
         color_idx = 0
-        POSICIONES_ICONO_UNICO = {2, 3, 8, 11, 13, 14, 18}
+        POSICIONES_ICONO_UNICO = {2, 3, 8, 13, 14, 18}
 
         for preg in data["preguntas"]:
             preg["preg_name"] = (
