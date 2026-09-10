@@ -47,9 +47,7 @@ class PayloadInfografia(BaseModel):
 
 
 def cambiar_color_svg(svg_content: str, nuevo_color: str) -> str:
-    """Modifica el atributo fill en etiquetas <svg>, <path>, <circle>, <rect>, etc.,
-
-    así como dentro de atributos CSS style='fill:...' para garantizar un color uniforme.
+    """Modifica el atributo fill en etiquetas <svg>, <path>, <circle>, <rect> y atributos CSS style='fill:...'.
     """
     try:
         soup = BeautifulSoup(svg_content, "xml")
@@ -60,22 +58,17 @@ def cambiar_color_svg(svg_content: str, nuevo_color: str) -> str:
 
         if not svg_tag:
             return svg_content
-
-        # Asegurar espacio de nombres XML para que Playwright lo renderice correctamente
         if not svg_tag.get("xmlns"):
             svg_tag["xmlns"] = "http://www.w3.org/2000/svg"
 
-        # Si la etiqueta principal tiene fill (distinto de 'none'), actualizarlo
         if svg_tag.get("fill") and svg_tag["fill"].lower() != "none":
             svg_tag["fill"] = nuevo_color
 
-        # Procesar todos los elementos gráficos internos
         elementos = soup.find_all(
             ["path", "circle", "rect", "polygon", "polyline", "g", "ellipse"]
         )
 
         for el in elementos:
-            # A) Manejar estilos CSS inline (ej: style="fill:#000; stroke:none;")
             if el.get("style"):
                 estilos = el["style"].split(";")
                 nuevos_estilos = []
@@ -97,11 +90,9 @@ def cambiar_color_svg(svg_content: str, nuevo_color: str) -> str:
 
                 el["style"] = ";".join(nuevos_estilos)
 
-            # B) Manejar atributo fill directos (ej: fill="#123456")
             elif el.get("fill"):
                 if el["fill"].lower() != "none":
                     el["fill"] = nuevo_color
-            # C) Si no especifica fill, forzar el nuevo color
             else:
                 el["fill"] = nuevo_color
 
@@ -172,7 +163,6 @@ async def procesar_infografia(payload: PayloadInfografia):
                                 "utf-8", errors="ignore"
                             )
 
-                        # Parseo inteligente de SVG (sirve para <svg>, <path>, <g>, styles, etc.)
                         svg_modificado = cambiar_color_svg(
                             svg_data, color_actual
                         )
@@ -187,7 +177,6 @@ async def procesar_infografia(payload: PayloadInfografia):
                             f"No se pudo procesar el SVG ({url_icono}): {err_icon}"
                         )
 
-            # Filtrar y ordenar respuestas al 75%
             respuestas_ordenadas = sorted(
                 preg["respuestas"], key=lambda x: x["porcentaje"], reverse=True
             )
