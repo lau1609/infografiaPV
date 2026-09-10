@@ -93,6 +93,20 @@
             line-height: 1.3;
         }
 
+        /* ICONO ÚNICO PARA PREGUNTAS CLAVE */
+        .card-single-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 6px 0 10px 0;
+        }
+
+        .card-single-icon img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
         .resp-row {
             display: flex;
             align-items: center;
@@ -101,12 +115,25 @@
             font-size: 11.5px;
         }
 
+        .resp-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            max-width: 75%;
+        }
+
+        .resp-icon-inline {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
         .resp-text {
             color: #515457;
             font-weight: 600;
             font-size: 11px;
             line-height: 1.3;
-            max-width: 75%;
         }
 
         .resp-val {
@@ -241,11 +268,6 @@
             min-width: 45px;
         }
 
-        .side-bracket-svg {
-            width: 16px;
-            min-height: 180px;
-        }
-
         /* FOOTER BASE */
         .footer {
             background: #10529d;
@@ -288,9 +310,21 @@
                 {% if p[idx] %}
                 <div class="card">
                     <div class="card-title">{{ p[idx].preg_name }}</div>
+
+                    {% if p[idx].icono_unico %}
+                    <div class="card-single-icon">
+                        <img src="{{ p[idx].icono_unico }}" alt="Icono Pregunta">
+                    </div>
+                    {% endif %}
+
                     {% for r in p[idx].respuestas %}
                     <div class="resp-row">
-                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <div class="resp-left">
+                            {% if not p[idx].icono_unico and r.icono %}
+                            <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                            {% endif %}
+                            <span class="resp-text">{{ r.respuesta }}</span>
+                        </div>
                         <span class="resp-val" style="color: {{ p[idx].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
@@ -359,9 +393,21 @@
                 {% if p[idx] %}
                 <div class="card">
                     <div class="card-title">{{ p[idx].preg_name }}</div>
+
+                    {% if p[idx].icono_unico %}
+                    <div class="card-single-icon">
+                        <img src="{{ p[idx].icono_unico }}" alt="Icono Pregunta">
+                    </div>
+                    {% endif %}
+
                     {% for r in p[idx].respuestas %}
                     <div class="resp-row">
-                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <div class="resp-left">
+                            {% if not p[idx].icono_unico and r.icono %}
+                            <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                            {% endif %}
+                            <span class="resp-text">{{ r.respuesta }}</span>
+                        </div>
                         <span class="resp-val" style="color: {{ p[idx].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
@@ -377,6 +423,13 @@
             {% if p[12] %}
             <div class="card" style="border-bottom: 1px solid white !important; padding-bottom: 0px !important;">
                 <div class="card-title">{{ p[12].preg_name }}</div>
+                
+                {% if p[12].icono_unico %}
+                <div class="card-single-icon">
+                    <img src="{{ p[12].icono_unico }}" alt="Icono Pregunta">
+                </div>
+                {% endif %}
+
                 <div class="card-12-options">
                     {% for r in p[12].respuestas %}
                     <div class="opt-box">
@@ -401,9 +454,21 @@
                 {% if p[13] %}
                 <div class="card">
                     <div class="card-title">{{ p[13].preg_name }}</div>
+
+                    {% if p[13].icono_unico %}
+                    <div class="card-single-icon">
+                        <img src="{{ p[13].icono_unico }}" alt="Icono Pregunta">
+                    </div>
+                    {% endif %}
+
                     {% for r in p[13].respuestas %}
                     <div class="resp-row">
-                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <div class="resp-left">
+                            {% if not p[13].icono_unico and r.icono %}
+                            <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                            {% endif %}
+                            <span class="resp-text">{{ r.respuesta }}</span>
+                        </div>
                         <span class="resp-val" style="color: {{ p[13].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
@@ -413,9 +478,21 @@
                 {% if p[14] %}
                 <div class="card">
                     <div class="card-title">{{ p[14].preg_name }}</div>
+
+                    {% if p[14].icono_unico %}
+                    <div class="card-single-icon">
+                        <img src="{{ p[14].icono_unico }}" alt="Icono Pregunta">
+                    </div>
+                    {% endif %}
+
                     {% for r in p[14].respuestas %}
                     <div class="resp-row">
-                        <span class="resp-text">{{ r.respuesta }}</span>
+                        <div class="resp-left">
+                            {% if not p[14].icono_unico and r.icono %}
+                            <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                            {% endif %}
+                            <span class="resp-text">{{ r.respuesta }}</span>
+                        </div>
                         <span class="resp-val" style="color: {{ p[14].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                     </div>
                     {% endfor %}
@@ -432,7 +509,6 @@
                     <div class="card" style="border-bottom: 1px solid white !important;">
                         <div class="card-title">{{ p[15].preg_name }}</div>
                         <div class="donut-block">
-                            
                             {% if grafica_dona %}
                             <img src="data:image/png;base64,{{ grafica_dona }}" style="width: 85px; height: 85px;" alt="Dona">
                             {% endif %}
@@ -443,7 +519,6 @@
                     <!-- Conexión tipo corchete con etiquetas de Porcentaje (SÍ / NO) hacia 16 y 17 -->
                     <div class="side-connected-container">
                         
-                        <!-- Porcentajes Sí / No colocados junto a la línea -->
                         <div class="side-pct-labels">
                             {% if p[15] and p[15].respuestas %}
                                 {% for r in p[15].respuestas %}
@@ -455,16 +530,26 @@
                             {% endif %}
                         </div>
 
-                        
-
                         <!-- Tarjetas 16 (Sí) y 17 (No) -->
                         <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
                             {% if p[16] %}
                             <div class="card">
                                 <div class="card-title">{{ p[16].preg_name }}</div>
+
+                                {% if p[16].icono_unico %}
+                                <div class="card-single-icon">
+                                    <img src="{{ p[16].icono_unico }}" alt="Icono Pregunta">
+                                </div>
+                                {% endif %}
+
                                 {% for r in p[16].respuestas %}
                                 <div class="resp-row">
-                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                    <div class="resp-left">
+                                        {% if not p[16].icono_unico and r.icono %}
+                                        <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                                        {% endif %}
+                                        <span class="resp-text">{{ r.respuesta }}</span>
+                                    </div>
                                     <span class="resp-val" style="color: {{ p[16].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                                 </div>
                                 {% endfor %}
@@ -474,9 +559,21 @@
                             {% if p[17] %}
                             <div class="card">
                                 <div class="card-title">{{ p[17].preg_name }}</div>
+
+                                {% if p[17].icono_unico %}
+                                <div class="card-single-icon">
+                                    <img src="{{ p[17].icono_unico }}" alt="Icono Pregunta">
+                                </div>
+                                {% endif %}
+
                                 {% for r in p[17].respuestas %}
                                 <div class="resp-row">
-                                    <span class="resp-text">{{ r.respuesta }}</span>
+                                    <div class="resp-left">
+                                        {% if not p[17].icono_unico and r.icono %}
+                                        <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                                        {% endif %}
+                                        <span class="resp-text">{{ r.respuesta }}</span>
+                                    </div>
                                     <span class="resp-val" style="color: {{ p[17].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                                 </div>
                                 {% endfor %}
@@ -493,9 +590,21 @@
                     {% if p[19] %}
                     <div class="card">
                         <div class="card-title">{{ p[19].preg_name }}</div>
+
+                        {% if p[19].icono_unico %}
+                        <div class="card-single-icon">
+                            <img src="{{ p[19].icono_unico }}" alt="Icono Pregunta">
+                        </div>
+                        {% endif %}
+
                         {% for r in p[19].respuestas %}
                         <div class="resp-row">
-                            <span class="resp-text">{{ r.respuesta }}</span>
+                            <div class="resp-left">
+                                {% if not p[19].icono_unico and r.icono %}
+                                <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                                {% endif %}
+                                <span class="resp-text">{{ r.respuesta }}</span>
+                            </div>
                             <span class="resp-val" style="color: {{ p[19].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                         </div>
                         {% endfor %}
@@ -505,9 +614,21 @@
                     {% if p[20] %}
                     <div class="card">
                         <div class="card-title">{{ p[20].preg_name }}</div>
+
+                        {% if p[20].icono_unico %}
+                        <div class="card-single-icon">
+                            <img src="{{ p[20].icono_unico }}" alt="Icono Pregunta">
+                        </div>
+                        {% endif %}
+
                         {% for r in p[20].respuestas %}
                         <div class="resp-row">
-                            <span class="resp-text">{{ r.respuesta }}</span>
+                            <div class="resp-left">
+                                {% if not p[20].icono_unico and r.icono %}
+                                <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
+                                {% endif %}
+                                <span class="resp-text">{{ r.respuesta }}</span>
+                            </div>
                             <span class="resp-val" style="color: {{ p[20].color_hex }};">{{ "%.0f"|format(r.porcentaje) }}%</span>
                         </div>
                         {% endfor %}
