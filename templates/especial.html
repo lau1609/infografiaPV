@@ -380,16 +380,15 @@
             </div>
             {% endif %}
 
-            <!-- PREGUNTA 11: ¿Quiénes conforman el grupo de viaje? -->
+            <!-- PREGUNTA 11: Transporte -->
             {% if p[11] %}
-            <div class="card">
-                <div class="card-title">{{ p[11].preg_name }}</div>
-                <div class="card-body-flex">
+                <div class="card">
+                    <div class="card-title">{{ p[11].preg_name }}</div>
                     <div class="card-answers-wrapper">
                         {% for r in p[11].respuestas %}
                         <div class="resp-row">
                             <div class="resp-left">
-                                {% if not p[11].icono_unico and r.icono %}
+                                {% if r.icono %}
                                 <img src="{{ r.icono }}" class="resp-icon-inline" alt="icon">
                                 {% endif %}
                                 <span class="resp-text">{{ r.respuesta }}</span>
@@ -398,13 +397,7 @@
                         </div>
                         {% endfor %}
                     </div>
-                    {% if p[11].icono_unico %}
-                    <div class="card-single-icon-side">
-                        <img src="{{ p[11].icono_unico }}" alt="Icono">
-                    </div>
-                    {% endif %}
                 </div>
-            </div>
             {% endif %}
         </div>
 
@@ -506,6 +499,11 @@
                 <div class="card">
                     <div class="card-title">{{ p[14].preg_name }}</div>
                     <div class="card-body-flex">
+                        {% if p[14].icono_unico %}
+                        <div class="card-single-icon-side">
+                            <img src="{{ p[14].icono_unico }}" alt="Icono">
+                        </div>
+                        {% endif %}
                         <div class="card-answers-wrapper">
                             {% for r in p[14].respuestas %}
                             <div class="resp-row">
@@ -516,11 +514,7 @@
                             </div>
                             {% endfor %}
                         </div>
-                        {% if p[14].icono_unico %}
-                        <div class="card-single-icon-side">
-                            <img src="{{ p[14].icono_unico }}" alt="Icono">
-                        </div>
-                        {% endif %}
+                        
                     </div>
                 </div>
                 {% endif %}
