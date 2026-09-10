@@ -132,6 +132,9 @@ async def procesar_infografia(payload: PayloadInfografia):
             color_actual = COLORES[color_index % len(COLORES)]
             preg["color_hex"] = color_actual
 
+            # Acumulador para saber cuántos iconos válidos tiene la pregunta
+            iconos_encontrados = []
+
             for resp in preg["respuestas"]:
                 if not resp.get("respuesta") and resp.get("texto"):
                     resp["respuesta"] = resp["texto"]
@@ -177,6 +180,10 @@ async def procesar_infografia(payload: PayloadInfografia):
                             f"No se pudo procesar el SVG ({url_icono}): {err_icon}"
                         )
 
+                if resp.get("icono"):
+                    iconos_encontrados.append(resp["icono"])
+
+            # Ordenar y filtrar respuestas por porcentaje acumulado
             respuestas_ordenadas = sorted(
                 preg["respuestas"], key=lambda x: x["porcentaje"], reverse=True
             )
@@ -192,6 +199,13 @@ async def procesar_infografia(payload: PayloadInfografia):
 
             preg["respuestas"] = respuestas_filtradas
 
+            # Identificar si la tarjeta utiliza un único icono para todas sus respuestas
+            if len(iconos_encontrados) == 1:
+                preg["icono_unico"] = iconos_encontrados[0]
+            else:
+                preg["icono_unico"] = None
+
+            # Asignar pregunta a su sección correspondiente
             if part in [1, 2, 3, 4]:
                 resultado["columnas"][part].append(preg)
                 color_index += 1
@@ -248,7 +262,6 @@ async def procesar_infografia(payload: PayloadInfografia):
         raise HTTPException(
             status_code=500, detail=f"Error en servidor Python: {str(e)}"
         )
-
 
 @app.post("/generar-infografia-esp")
 async def procesar_infografia_especial(payload: PayloadInfografia):
