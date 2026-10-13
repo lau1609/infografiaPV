@@ -222,7 +222,7 @@ async def procesar_infografia(payload: PayloadInfografia):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             context = await browser.new_context(
-                viewport={"width": 1450, "height": 1950}, device_scale_factor=3
+                viewport={"width": 1450, "height": 1850}, device_scale_factor=3
             )
             page = await context.new_page()
 
@@ -439,7 +439,7 @@ async def procesar_infografia_especial(payload: PayloadInfografia):
         async with async_playwright() as p_play:
             browser = await p_play.chromium.launch(headless=True)
             context = await browser.new_context(
-                viewport={"width": 1450, "height": 1950},
+                viewport={"width": 1450, "height": 1850},
                 device_scale_factor=3,
             )
             page = await context.new_page()
